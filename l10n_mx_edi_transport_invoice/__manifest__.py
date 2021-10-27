@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    "name"      : "Comprobante Electronico para Traslados (CE)",
+    "name"      : "Comprobante Electronico para Traslados (EE)",
     "version"   : "1.0",
     "author"    : "German Ponce Dominguez",
     "website"   : "https://www.argil.mx",
@@ -17,11 +17,12 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
 """,
     
     "depends": [
-        "l10n_mx_einvoice",
+        "l10n_mx_edi",
         ],
     "data"    : [
                  "account_invoice_view.xml",
                  "report_invoice_facturae.xml",
+                 # "data/transport_complement.xml",
     ],
     "installable": True,
 }
