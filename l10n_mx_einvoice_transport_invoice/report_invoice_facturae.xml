@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    
+    <template id="invoice_cfdi_33_report_transport" inherit_id="l10n_mx_einvoice.report_invoice_document_cfdi">
+        <xpath expr="//td[@name='property_payment']/p[1]" position="inside"> 
+            <strong>RfcProvCertif: </strong><span t-field="o.rfcprovcertif"/><BR/>
+        </xpath>
+    </template>
+
+
+</data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+     <record model="ir.ui.view" id="l10n_mx_einvoice_filter_transport_document">
+            <field name="name">account.invoice.cfdi.33.filter</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                 <filter name="to_check" position="after">
+                    <filter string="Factura Traslado" domain="[('transport_document_cfdi','=',True)]" name="transport_filter"/>
+                 </filter>
+            </field>
+        </record>
+
+     <record model="ir.ui.view" id="l10n_mx_einvoice_tree_transport_document">
+            <field name="name">account.invoice.cfdi.33.tree</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="before">
+                    <field name="transport_document_cfdi" />
+                </field>
+            </field>
+        </record>
+
+     <record model="ir.ui.view" id="l10n_mx_einvoice_form_transport_document">
+            <field name="name">account.invoice.cfdi.33</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_mx_einvoice.view_move_form_l10n_mx_einvoice"/>
+            <field name="arch" type="xml">
+                    <field name="pay_method_id"  position="replace">
+                        <field name="pay_method_id" 
+                           attrs="{'invisible': ['|', ('move_type','not in',('out_invoice','out_refund')),('use_for_cfdi','in',(0,False))], 'required': [('move_type','in',('out_invoice','out_refund')),('use_for_cfdi','in',(1,True)),('transport_document_cfdi','=',False)]}"/>
+                           
+                        <field name="transport_document_cfdi" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    </field>
+                    <field name="metodo_pago_id"  position="replace">
+                        <field name="metodo_pago_id" 
+                           attrs="{'invisible': ['|', ('move_type','not in',('out_invoice','out_refund')),('use_for_cfdi','in',(0,False))], 'required': [('move_type','in',('out_invoice','out_refund')),('use_for_cfdi','in',(1,True)),('transport_document_cfdi','=',False)]}"
+                           options="{'no_create_edit': True,'no_open': True}"/>
+                    </field>
+                    <field name="type_document_id" position="after">
+                        <field name="rfcprovcertif" attrs="{'invisible':[('transport_document_cfdi','=',False)]}"/>
+                </field>
+                </field>
+            </record>
+
+</data>
+</odoo>
