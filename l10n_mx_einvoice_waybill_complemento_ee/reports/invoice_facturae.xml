@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    
+<!-- <template id="invoice_cfdi_33_report_transport" inherit_id="account.report_invoice_document">
+    <xpath expr="//td[@name='property_payment']" position="inside"> 
+        <strong>RfcProvCertif: </strong><span t-field="o.rfcprovcertif"/><BR/>
+    </xpath>
+</template> -->
+
+    <template id="report_invoice_document_waybill_report_style" inherit_id="account.report_invoice_document">
+        <div class="page" position="inside">
+           <header>
+                <style type="text/css">
+                    .tg0  {border-collapse:collapse;border-spacing:0;}
+                    .tg0 td{font-family:Arial, sans-serif;font-size:14px;
+                      overflow:hidden;padding:3px 5px;word-break:normal;}
+                    .tg0 th{font-family:Arial, sans-serif;font-size:14px;
+                      font-weight:normal;overflow:hidden;padding:3px 5px;word-break:normal;}
+                    .tg0 .tg-v0pw{background-color:#527eb3;border-color:#527eb3;font-weight:bold;text-align:center;vertical-align:top;color: #FFFFFF}
+                    .tg0 .tg-w9vd{;text-align:center;vertical-align:middle}
+                </style>
+            </header>
+        </div>
+      </template>
+
+    <template id="report_invoice_document_waybill_report" inherit_id="l10n_mx_edi.report_invoice_document_mx">
+        <xpath expr="//div[@id='complement']"  position="before">
+            <table class="tg0" style="undefined;table-layout: fixed" width="100%" t-if="o.cfdi_complemento == 'carta_porte'">
+                <tbody>
+                  <tr>
+                    <td class="tg-v0pw">Complemento Carta Porte</td>
+                    <td class="tg-v0pw">Transporte Internacional</td>
+                    <td class="tg-v0pw">Entrada/Salida Mercancia</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd">Si</td>
+                    <td class="tg-w9vd"><span t-field="o.international_shipping" /></td>
+                    <td class="tg-w9vd"><span t-field="o.shipping_complement_type" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">Tipo Transporte</td>
+                    <td class="tg-v0pw">Distancia Recorrida KM</td>
+                    <td class="tg-v0pw">Peso Total KG</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.tipo_transporte_id.code" /> - <span t-field="o.tipo_transporte_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.travel_total_distance" /></td>
+                    <td class="tg-w9vd"><span t-field="o.weight_charge_total" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">Tipo Estación</td>
+                    <td class="tg-v0pw">Claves Transporta</td>
+                    <td class="tg-v0pw">Distancia Recorrida KM</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.waybill_origin_station_type_id.code" /> - <span t-field="o.waybill_origin_station_type_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.waybill_origin_station_type_id.charge_key" /></td>
+                    <td class="tg-w9vd">-</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">RFC Remitente</td>
+                    <td class="tg-v0pw">Nombre Remitente</td>
+                    <td class="tg-v0pw">Fecha/Hora Salida Mercancias</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.waybill_origin_partner_id.vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.waybill_origin_partner_id.name" /></td>
+                    <td class="tg-w9vd"><span t-esc="o.convert_datetime_to_tz(o.waybill_origin_date_out)" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw" colspan="3">Domicilio Origen</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd" colspan="3"><span t-esc="o.get_domicilio_origen()" /></td>
+                  </tr>
+
+                  <tr>
+                    <td class="tg-v0pw">Tipo Estación</td>
+                    <td class="tg-v0pw">Claves Transporta</td>
+                    <td class="tg-v0pw">Distancia Recorrida KM</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.waybill_destiny_station_type_id.code" /> - <span t-field="o.waybill_destiny_station_type_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.waybill_destiny_station_type_id.charge_key" /></td>
+                    <td class="tg-w9vd"><span t-field="o.waybill_destiny_distance" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">RFC Destinatario</td>
+                    <td class="tg-v0pw">Nombre Destinatario</td>
+                    <td class="tg-v0pw">Fecha/Hora prog. Llegada</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.waybill_destiny_partner_id.vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.waybill_destiny_partner_id.name" /></td>
+                    <td class="tg-w9vd"><span t-esc="o.convert_datetime_to_tz(o.waybill_destiny_date_prog_arrived)" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw" colspan="3">Domicilio Destino</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd" colspan="3"><span t-esc="o.get_domicilio_destino()" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">Permiso SCT</td>
+                    <td class="tg-v0pw">Tipo Permiso</td>
+                    <td class="tg-v0pw">Aseguradora</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.type_stc_permit_number" /></td>
+                    <td class="tg-w9vd"><span t-field="o.type_stc_permit_id.code" /> - <span t-field="o.type_stc_permit_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_insurance_id.name" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-v0pw">Póliza Seguro</td>
+                    <td class="tg-v0pw">Tipo Autotransporte</td>
+                    <td class="tg-v0pw">Placa y Año Vehiculo</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.partner_insurance_number" /></td>
+                    <td class="tg-w9vd"><span t-field="o.configuracion_federal_id.code" /> - <span t-field="o.configuracion_federal_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.vehicle_plate_cp" /> / <span t-field="o.vehicle_year_model_cp"/></td>
+                  </tr>
+                  <t t-foreach="o.trailer_line_ids" t-as="trailer">
+                    <tr>
+                      <td class="tg-v0pw">Remolque</td>
+                      <td class="tg-v0pw"></td>
+                      <td class="tg-v0pw">Placas</td>
+                    </tr>
+                    <tr>
+                      <td class="tg-w9vd"><span t-field="trailer.subtype_trailer_id" /></td>
+                      <td class="tg-w9vd"></td>
+                      <td class="tg-w9vd"><span t-field="trailer.trailer_plate_cp" /></td>
+                    </tr>
+                  </t>
+                  <tr t-if="o.tipo_transporte_code=='01'">
+                    <td class="tg-v0pw">Nombre Operador</td>
+                    <td class="tg-v0pw">RFC Operador</td>
+                    <td class="tg-v0pw">Licencia Operador</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-w9vd"><span t-field="o.driver_cp_id" /></td>
+                    <td class="tg-w9vd"><span t-field="o.driver_cp_vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.cp_driver_license" /></td>
+                  </tr>
+                  <tr t-if="o.partner_owner_id">
+                    <td class="tg-v0pw">Nombre Propietario</td>
+                    <td class="tg-v0pw">RFC Propietario</td>
+                    <td class="tg-v0pw">Pais</td>
+                  </tr>
+                  <tr t-if="o.partner_owner_id">
+                    <td class="tg-w9vd"><span t-field="o.partner_owner_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_owner_id.vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_owner_id.country_id" /></td>
+                  </tr>
+                  <tr t-if="o.partner_lessee_id">
+                    <td class="tg-v0pw">Nombre Arrendatario</td>
+                    <td class="tg-v0pw">RFC Arrendatario</td>
+                    <td class="tg-v0pw">Pais</td>
+                  </tr>
+                  <tr t-if="o.partner_lessee_id">
+                    <td class="tg-w9vd"><span t-field="o.partner_lessee_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_lessee_id.vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_lessee_id.country_id" /></td>
+                  </tr>
+                  <tr t-if="o.partner_notified_id">
+                    <td class="tg-v0pw">Nombre Notificado</td>
+                    <td class="tg-v0pw">RFC Notificado</td>
+                    <td class="tg-v0pw">Pais</td>
+                  </tr>
+                  <tr t-if="o.partner_notified_id">
+                    <td class="tg-w9vd"><span t-field="o.partner_notified_id.name" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_notified_id.vat" /></td>
+                    <td class="tg-w9vd"><span t-field="o.partner_notified_id.country_id" /></td>
+                  </tr>
+                </tbody>
+            </table>
+            <table class="tg0" style="undefined;table-layout: fixed" width="100%" t-if="o.cfdi_complemento == 'carta_porte'">
+                  <thead>
+                      <tr>
+                        <th class="tg-v0pw" colspan="8">Mercancias Transportadas</th>
+                      </tr>
+                      <tr>
+                        <th class="tg-v0pw">Producto SAT</th>
+                        <th class="tg-v0pw">Cantidad</th>
+                        <th class="tg-v0pw">UdM</th>
+                        <th class="tg-v0pw">Clave STCC</th>
+                        <th class="tg-v0pw">Peso KG</th>
+                        <th class="tg-v0pw">Dimensiones</th>
+                        <th class="tg-v0pw">Material Peligroso</th>
+                        <th class="tg-v0pw">Clave M.P.</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  <tr t-foreach="o.invoice_line_complement_cp_ids" t-as="m">
+                    <td class="tg-w9vd"><span t-field="m.sat_product_id" /></td>
+                    <td class="tg-w9vd"><span t-field="m.quantity" /></td>
+                    <td class="tg-w9vd"><span t-field="m.sat_uom_id" /></td>
+                    <td class="tg-w9vd"><span t-field="m.clave_stcc_id" /></td>
+                    <td class="tg-w9vd"><span t-field="m.weight_charge" /></td>
+                    <td class="tg-w9vd"><span t-field="m.dimensions_charge" /></td>
+                    <td class="tg-w9vd"><span t-field="m.hazardous_material" /></td>
+                    <td class="tg-w9vd"><span t-field="m.hazardous_key_product_id" /></td>
+                  </tr>
+                </tbody>
+            </table>
+        </xpath>        
+    </template>
+
+
+</data>
+</odoo>

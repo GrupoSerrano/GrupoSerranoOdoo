@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record  model="ir.ui.view" id="account_invoice_form_l10n_mx_complementos">
+        <field name="name">account.move.l10n_mx_einvoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_reference" position="before">
+                <field name="cfdi_complemento" attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund'))]}" />
+            </field>
+        </field>
+    </record>
+        
+
+     <record model="ir.ui.view" id="account_invoice_form_l10n_mx_einvoice_complemento_carta_porte">
+            <field name="name">account.move.cfdi.33.complemento.carta.porte</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Complemento Carta Porte"
+                          attrs="{'invisible': [('cfdi_complemento','!=','carta_porte')]}">
+                        <field name="tipo_transporte_code" invisible="1" />
+                        <group>
+                            <group>
+                                <field name="tipo_transporte_id" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': ['|',('state','!=', 'draft'),('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}" />
+                                <label for="travel_total_distance" string="Distancia total recorrida"/>
+                                <div class="o_row">
+                                    <field name="travel_total_distance" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>  
+                                    <field name="travel_total_distance_type" readonly="1"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="international_shipping" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                <field name="waybill_pedimento" attrs="{'required': [('cfdi_complemento','=','carta_porte'),('international_shipping','=','SI')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)], 'invisible':['|',('cfdi_complemento','!=','carta_porte'),('international_shipping','!=','SI')]}"
+                                       placeholder="Ej: 21  47  3807  8003832"/>
+                                <field name="shipping_complement_type" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Permiso STC">
+                                <field name="type_stc_permit_id" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte')]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="type_stc_permit_number" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte')]}" />
+                                <label for="vehicle_plate_cp" string="Matrícula Aeronave" 
+                                       attrs="{'invisible' :[('tipo_transporte_code','!=','03')]}"/>
+                                <div attrs="{'invisible' :[('tipo_transporte_code','!=','03')]}">
+                                    <field name="vehicle_plate_cp" 
+                                       attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('tipo_transporte_code','=','03'),('cfdi_complemento','=','carta_porte')]}" />
+                                </div>
+                                
+                            </group>
+                            <group string="Seguro">
+                                <field name="partner_insurance_id" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte')]}" options="{'no_create': True, 'no_create_edit': True}" />
+                                <field name="partner_insurance_number" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte')]}"/>
+                            </group>
+                        </group>
+                            <group string="Ubicaciones">
+                                <group string="Origen">
+                                    <field name="waybill_origin_station_type_id" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}" placeholder="Empresa transportista ..."/>
+                                    <field name="waybill_origin_station_id" 
+                                           domain="[('code','=',tipo_transporte_code)]"
+                                           attrs="{'invisible': [('tipo_transporte_code','!=','03')], 'required': [('tipo_transporte_code','=','03')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                    <field name="waybill_origin_partner_id" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                    <field name="waybill_origin_date_out" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                    <field name="waybill_origin_partner_references"  attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                    
+                                            
+                                </group>
+                                <group string="Destino">
+                                    <field name="waybill_destiny_station_type_id" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                    <field name="waybill_destiny_station_id"
+                                           domain="[('code','=',tipo_transporte_code)]"
+                                           attrs="{'invisible': [('tipo_transporte_code','!=','03')], 'required': [('tipo_transporte_code','=','03')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                   <field name="waybill_destiny_partner_id" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                    <field name="waybill_destiny_date_prog_arrived" attrs="{'required': [('cfdi_complemento','=','carta_porte')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                    <field name="waybill_destiny_partner_references" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                    <label for="waybill_destiny_distance" string="Distancia recorrida"/>
+                                    <div class="o_row">
+                                        <field name="waybill_destiny_distance" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>  
+                                        <field name="waybill_destiny_total_distance_type" readonly="1"/>
+                                    </div>
+                                </group>
+                            </group>
+                            <notebook>
+                                <page string="Mercancias">
+                                    <separator string="Mercancias" />
+                                    <group>
+                                <group>
+                                    <field name="waybill_tasc_charges" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                            <button string="Actualizar" icon="fa-refresh" name='%(import_lines_detail_waybill_act)d' class="oe_right" style="display: inline-block;
+  padding: 5px 15px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #b787aa;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 5px #999;" type="action"/>
+                                    <field name="invoice_line_complement_cp_ids" nolabel="1" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}">
+                                        <tree string="Detalle Complemento" editable="bottom">
+                                            <!-- <field name="invoice_line_id"  readonly="1"/> -->
+                                            <field name="product_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="description"/>
+                                            <field name="sat_product_id"  required="1" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="quantity"  required="1"/>
+                                            <field name="sat_uom_id"  required="1" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="clave_stcc_id" required="1" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="weight_charge" required="1"/>
+                                            <field name="dimensions_charge" required="1" placeholder="Ej. 30/20/10plg"/>
+                                            <field name="hazardous_material"/>
+                                            <field name="hazardous_key_product_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="charge_value" />
+                                        </tree>
+                                        <form string="Linea Complemento Carta Porte">
+                                            <group>
+                                                <!-- <field name="invoice_line_id"  readonly="1"/> -->
+                                                <field name="product_id"/>
+                                                <field name="description"/>
+                                                <field name="sat_product_id"  required="1"/>
+                                                <field name="quantity"  required="1"/>
+                                                <field name="sat_uom_id"  required="1"/>
+                                                <field name="clave_stcc_id"  required="1"/>
+                                                <field name="weight_charge"  required="1"/>
+                                                <field name="dimensions_charge" required="1" placeholder="Ej. 30/20/10plg"/>
+                                                <field name="hazardous_material" />
+                                                <field name="hazardous_key_product_id"/>
+                                                <field name="charge_value"/>
+                                            </group>
+                                        </form>
+                                    </field>
+
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="subtotal_items">
+                                        <field name="total_quantity_items" />
+                                    </group>
+
+                                </page>
+                                <page string="Auto Transporte Federal"
+                                      attrs="{'invisible': [('tipo_transporte_code','!=','01')]}">
+                                    <separator string="Identificación Vehicular" />
+                                    <group>
+                                        <group>
+                                            <field name="configuracion_federal_id" attrs="{'required': [('cfdi_complemento','=','carta_porte'), ('tipo_transporte_code','=','01')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                        </group>
+                                        <group >
+                                            <field name="vehicle_plate_cp" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte')]}" />
+                                            <field name="vehicle_year_model_cp" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('cfdi_complemento','=','carta_porte'),('tipo_transporte_code','=','01')]}"/>
+                                        </group>
+                                    </group>
+                                    <separator string="Remolques o Semi Remolques" />
+                                    <group>
+                                        <field name="trailer_line_ids" attrs="{ 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" nolabel="1">
+                                            <tree string="Remolques" editable="bottom">
+                                                <field name="subtype_trailer_id" options="{'no_create': True, 'no_create_edit': True}" required="1"/>
+                                                <field name="trailer_plate_cp" required="1"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </page>
+                                <page string="Transporte Aéreo"
+                                      attrs="{'invisible': [('tipo_transporte_code','!=','03')]}">
+                                    <group>
+                                        <group>
+                                            <field name="waybill_transportista_aereo_id" 
+                                                   domain="[('codigo_transportista_aereo_id','!=',False)]"
+                                                   attrs="{'required': [('tipo_transporte_code','=','03')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                            <field name="codigo_transportista_aereo_id" />
+                                            <field name="waybill_num_guia_aereo"
+                                                attrs="{'required': [('tipo_transporte_code','=','03')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                            <field name="waybill_embarcador_aereo_id" 
+                                                   attrs="{'required': [('tipo_transporte_code','=','03')], 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}"/>
+                                        </group>
+                                        <group>
+                                            
+                                            
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Figura Transporte">
+                                    <separator string="Operador" attrs="{'invisible': [('tipo_transporte_code','!=','01')]}"/>
+                                    <group attrs="{'invisible': [('tipo_transporte_code','!=','01')]}">
+                                        <group>
+                                            <field name="driver_cp_id" attrs="{ 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)],'required':[('tipo_transporte_code','=','01'),('cfdi_complemento','=','carta_porte')]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                            <field name="driver_cp_vat" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)], 'required':[('driver_cp_id','!=',False)]}" />
+                                            <field name="cp_driver_license" attrs="{'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)], 'required':[('driver_cp_id','!=',False)]}" />
+                                        </group>
+                                        <group>             
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group string="Propietario">
+                                            <field name="partner_owner_id" attrs="{ 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>
+                                        </group>
+                                        <group string="Arrendatario">
+                                            <field name="partner_lessee_id" attrs="{ 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>             
+                                        </group>
+                                        <group string="Notificado">
+                                            <field name="partner_notified_id" attrs="{ 'readonly': [('l10n_mx_edi_cfdi_uuid','!=',False)]}" options="{'no_create': True, 'no_create_edit': True}"/>             
+                                        </group>
+                                    </group>
+
+                                </page>
+                                
+                            </notebook>
+                            
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- Lineas Detalle Carga -->
+
+        <record id="invoice_line_complement_cp_tree" model="ir.ui.view">
+            <field name="name">invoice.line.complement.cp.tree</field>
+            <field name="model">invoice.line.complement.cp</field>
+            <field name="arch" type="xml">
+                <tree string="Detalles de Carga" >
+                    <field name="invoice_id"  readonly="1"/>
+                    <field name="product_id"/>
+                    <field name="description"/>
+                    <field name="sat_product_id"  required="1"/>
+                    <field name="quantity"  required="1"/>
+                    <field name="sat_uom_id"  required="1"/>
+                    <field name="clave_stcc_id" required="1" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="weight_charge" required="1"/>
+                    <field name="dimensions_charge" required="1" placeholder="Ej. 30/20/10plg"/>
+                    <field name="hazardous_material"/>
+                    <field name="hazardous_key_product_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="charge_value" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="invoice_line_complement_cp_form" model="ir.ui.view">
+            <field name="name">invoice.line.complement.cp.form</field>
+            <field name="model">invoice.line.complement.cp</field>
+            <field name="arch" type="xml">
+                <form string="Detalle de Carga">
+                    <sheet>
+                        <group>
+                            <field name="invoice_id"  readonly="1"/>
+                            <field name="product_id"/>
+                            <field name="description"/>
+                            <field name="sat_product_id"  required="1"/>
+                            <field name="quantity"  required="1"/>
+                            <field name="sat_uom_id"  required="1"/>
+                            <field name="clave_stcc_id" required="1" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="weight_charge" required="1"/>
+                            <field name="dimensions_charge" required="1" placeholder="Ej. 30/20/10 plg"/>
+                            <field name="hazardous_material"/>
+                            <field name="hazardous_key_product_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="charge_value" />
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="invoice_line_complement_cp_search" model="ir.ui.view">
+            <field name="name">invoice.line.complement.cp.serch</field>
+            <field name="model">invoice.line.complement.cp</field>
+            <field name="arch" type="xml">
+                <search string="Detalles de Carga">
+                    <field name="sat_product_id"  required="1"/>
+                    <field name="sat_uom_id"  required="1"/>
+                    <field name="invoice_id"/>
+                    <field name="weight_charge"/>
+                    <field name="dimensions_charge"/>
+                    <field name="clave_stcc_id"/>
+                    <field name="hazardous_material"/>
+                    <field name="hazardous_key_product_id"/>
+                    <field name="charge_value"  readonly="0" />
+                </search>
+            </field>
+        </record>
+
+        <record id="action_invoice_line_complement_cp" model="ir.actions.act_window">
+            <field name="name">Detalle Carga Complemento CP</field>
+            <field name="res_model">invoice.line.complement.cp</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="invoice_line_complement_cp_tree"/>
+        </record>
+
+
+    
+
+    </data>
+</odoo>

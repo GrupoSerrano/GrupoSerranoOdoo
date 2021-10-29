@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+invoice_line_complement_cp_access,invoice.line.complement.cp,model_invoice_line_complement_cp,,1,1,1,1
+import_lines_detail_waybill_access,import.lines.detail.waybill,model_import_lines_detail_waybill,,1,1,1,1
+invoice_waybill_trailer_info_access,invoice.waybill.trailer.info,model_invoice_waybill_trailer_info,,1,1,1,1
+sat_catalogos_wizard_access,sat.catalogos.wizard,model_sat_catalogos_wizard,,1,1,1,1
