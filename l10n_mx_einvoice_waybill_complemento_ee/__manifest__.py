@@ -34,7 +34,7 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
     
     "depends": [
         "l10n_mx_edi",
-        "l10n_mx_edi_extend",
+        "l10n_mx_edi_extended",
         "product_unspsc",
         "l10n_mx_einvoice_waybill_base",
         "l10n_mx_einvoice_waybill_base_address_data",
