@@ -42,14 +42,14 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
     "data"    : [
 
                 'security/ir.model.access.csv',
-                'wizard/update_lines_wizard_view.xml',
-                'wizard/sat_catalogos_wizard_view.xml',
-                'views/account_view.xml',
-                'views/product_view.xml',
-                'views/res_partner_view.xml',
-                'views/res_company_view.xml',
-                'data/waybill_complement.xml',
-                'reports/invoice_facturae.xml',
+                # 'wizard/update_lines_wizard_view.xml',
+                # 'wizard/sat_catalogos_wizard_view.xml',
+                # 'views/account_view.xml',
+                # 'views/product_view.xml',
+                # 'views/res_partner_view.xml',
+                # 'views/res_company_view.xml',
+                # 'data/waybill_complement.xml',
+                # 'reports/invoice_facturae.xml',
     ],
         "installable": True,
 }
