@@ -1,6 +1,20 @@
 # -*- encoding: utf-8 -*-
-#    Coded by: german_442 email: (german.ponce@argil.mx)
-##############################################################################
+# Coded by German Ponce Dominguez 
+#     ▬▬▬▬▬.◙.▬▬▬▬▬  
+#       ▂▄▄▓▄▄▂  
+#    ◢◤█▀▀████▄▄▄▄▄▄ ◢◤  
+#    █▄ █ █▄ ███▀▀▀▀▀▀▀ ╬  
+#    ◥ █████ ◤  
+#     ══╩══╩═  
+#       ╬═╬  
+#       ╬═╬ Dream big and start with something small!!!  
+#       ╬═╬  
+#       ╬═╬ You can do it!  
+#       ╬═╬   Let's go...
+#    ☻/ ╬═╬   
+#   /▌  ╬═╬   
+#   / \
+# Cherman Seingalt - german.ponce@outlook.com
 
 from odoo import api, fields, models, _, tools
 from datetime import datetime, date
@@ -29,6 +43,7 @@ class ProductTemplate(models.Model):
             rec.dimensiones_plg = dimensions
 
     clave_stcc_id = fields.Many2one('waybill.producto.stcc', 'Clave STCC')
+    tipo_embalaje_id  =  fields.Many2one('waybill.tipo.embalaje', 'Tipo de Embalaje')
 
     product_length = fields.Float("Largo", digits=(14,3))
     product_height = fields.Float("Ancho", digits=(14,3))
@@ -36,6 +51,10 @@ class ProductTemplate(models.Model):
 
     dimensiones_plg = fields.Char('Dimensiones Pulgadas', compute="_get_dimensions_waybill")
 
+    hazardous_material = fields.Selection([('Si','Si'),('No','No')], string="Material Peligroso", default="No" )
+    
+    hazardous_key_product_id = fields.Many2one('waybill.materiales.peligrosos', 'Clave Material Peligroso')
+    
     def dimensions_to_plg(self, length, height, width):
         dimensions_string = ""
         if length:

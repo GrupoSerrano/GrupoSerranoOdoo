@@ -17,4 +17,6 @@ waybill_clave_transporte_access,waybill.clave.transporte,model_waybill_clave_tra
 waybill_materiales_peligrosos_access,waybill.materiales.peligrosos,model_waybill_materiales_peligrosos,,1,1,1,1
 waybill_tipo_embalaje_access,waybill.tipo.embalaje,model_waybill_tipo_embalaje,,1,1,1,1
 waybill_tipo_permiso_access,waybill.tipo.permiso,model_waybill_tipo_permiso,,1,1,1,1
-
+waybill_unidad_peso_access,waybill.unidad.peso,model_waybill_unidad_peso,,1,1,1,1
+waybill_figura_transporte_access,waybill.figura.transporte,model_waybill_figura_transporte,,1,1,1,1
+waybill_parte_transporte_access,waybill.parte.transporte,model_waybill_parte_transporte,,1,1,1,1

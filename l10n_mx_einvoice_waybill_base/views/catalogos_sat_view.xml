@@ -2,6 +2,194 @@
 <odoo>
     <data>
 
+    <!-- Figura Transporte -->
+
+        <record id="waybill_figura_transporte_tree" model="ir.ui.view">
+            <field name="name">waybill.figura.transporte.tree</field>
+            <field name="model">waybill.figura.transporte</field>
+            <field name="arch" type="xml">
+                <tree string="Figuras Transporte" >
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="waybill_figura_transporte_form" model="ir.ui.view">
+            <field name="name">waybill.figura.transporte.form</field>
+            <field name="model">waybill.figura.transporte</field>
+            <field name="arch" type="xml">
+                <form string="Figura Transporte">
+                    <sheet>
+                         <div class="oe_title">
+                        <label class="oe_edit_only" for="code" string="Clave SAT"/>
+                        <h1><field name="code" placeholder="CVE0000"/></h1>
+                        
+                    </div>
+                        
+                        <group >
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="start_date" />
+                            </group>
+                            <group>
+                                <field name="start_date" />
+                                <field name="end_date" />
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="waybill_figura_transporte_search" model="ir.ui.view">
+            <field name="name">waybill.figura.transporte.serch</field>
+            <field name="model">waybill.figura.transporte</field>
+            <field name="arch" type="xml">
+                <search string="Figuras transporte">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </search>
+            </field>
+        </record>
+
+    <!-- Figura Transporte -->
+
+        <record id="waybill_parte_transporte_tree" model="ir.ui.view">
+            <field name="name">waybill.parte.transporte.tree</field>
+            <field name="model">waybill.parte.transporte</field>
+            <field name="arch" type="xml">
+                <tree string="Tipos Parte Transporte" >
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="waybill_parte_transporte_form" model="ir.ui.view">
+            <field name="name">waybill.parte.transporte.form</field>
+            <field name="model">waybill.parte.transporte</field>
+            <field name="arch" type="xml">
+                <form string="Tipo Parte Transporte">
+                    <sheet>
+                         <div class="oe_title">
+                        <label class="oe_edit_only" for="code" string="Clave SAT"/>
+                        <h1><field name="code" placeholder="CVE0000"/></h1>
+                        
+                    </div>
+                        
+                        <group >
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="start_date" />
+                            </group>
+                            <group>
+                                <field name="start_date" />
+                                <field name="end_date" />
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="waybill_parte_transporte_search" model="ir.ui.view">
+            <field name="name">waybill.parte.transporte.serch</field>
+            <field name="model">waybill.parte.transporte</field>
+            <field name="arch" type="xml">
+                <search string="Tipos Parte transporte">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </search>
+            </field>
+        </record>
+        
+    <!-- Unidad Peso -->
+
+        <record id="waybill_unidad_peso_tree" model="ir.ui.view">
+            <field name="name">waybill.unidad.peso.tree</field>
+            <field name="model">waybill.unidad.peso</field>
+            <field name="arch" type="xml">
+                <tree string="Unidades de Peso" >
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="comments"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="simbol"/>
+                    <field name="bandera"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="waybill_unidad_peso_form" model="ir.ui.view">
+            <field name="name">waybill.unidad.peso.form</field>
+            <field name="model">waybill.unidad.peso</field>
+            <field name="arch" type="xml">
+                <form string="Unidad de Peso">
+                    <sheet>
+                         <div class="oe_title">
+                        <label class="oe_edit_only" for="code" string="Clave SAT"/>
+                        <h1><field name="code" placeholder="CVE0000"/></h1>
+                        
+                    </div>
+                        
+                        <group >
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="comments"/>
+                                <field name="simbol"/>
+                                <field name="bandera"/>
+                            </group>
+                            <group>
+                                <field name="start_date" />
+                                <field name="end_date" />
+                            </group>
+                        </group>
+                        
+                    </sheet>
+                    
+                </form>
+            </field>
+        </record>
+
+
+        <record id="waybill_unidad_peso_search" model="ir.ui.view">
+            <field name="name">waybill.unidad.peso.serch</field>
+            <field name="model">waybill.unidad.peso</field>
+            <field name="arch" type="xml">
+                <search string="Unidades Peso">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="comments"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="simbol"/>
+                    <field name="bandera"/>
+                </search>
+            </field>
+        </record>
+
 
         <!-- Tipos de Permiso -->
 
@@ -1298,7 +1486,26 @@
             <field name="view_id" ref="waybill_tipo_carro_tree"/>
         </record>
 
+        <record id="action_waybill_unidad_peso" model="ir.actions.act_window">
+            <field name="name">Unidades de Peso</field>
+            <field name="res_model">waybill.unidad.peso</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="waybill_unidad_peso_tree"/>
+        </record>
 
+        <record id="action_waybill_figura_transporte" model="ir.actions.act_window">
+            <field name="name">Figuras Transporte</field>
+            <field name="res_model">waybill.figura.transporte</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="waybill_figura_transporte_tree"/>
+        </record>
+
+        <record id="action_waybill_parte_transporte" model="ir.actions.act_window">
+            <field name="name">Tipos Parte de Transporte</field>
+            <field name="res_model">waybill.parte.transporte</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="waybill_parte_transporte_tree"/>
+        </record>
 
     </data>
 </odoo>

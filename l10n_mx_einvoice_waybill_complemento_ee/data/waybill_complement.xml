@@ -3,66 +3,129 @@
 
     <template id="waybill_complement" inherit_id="l10n_mx_edi.cfdiv33">
                 <!-- <xpath expr="//*[name()='cfdi:Comprobante']" position="attributes" t-if="record.l10n_mx_edi_origin">
-                    <attribute name="xmlns__cartaporte">http://www.sat.gob.mx/CartaPorte</attribute>
+                    <attribute name="xmlns__cartaporte20">http://www.sat.gob.mx/CartaPorte20</attribute>
                 </xpath> -->
         <xpath expr="*" position="inside">
             <t t-if="record.cfdi_complemento == 'carta_porte'">
                 <cfdi:Complemento
                 xmlns:cfdi="http://www.sat.gob.mx/cfd/3"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                     <t t-set="location_origin" t-value="record._get_complement_waybill_location_origin()"/>
-                     <t t-set="location_destiny" t-value="record._get_complement_waybill_location_destiny()"/>
                      <t t-set="transported_products" t-value="record._get_complement_waybill_items()"/>
                      <t t-set="autotransporte_federal" t-value="record._get_complement_waybill_transport_type()"/>
+                     <t t-set="ubicaciones" t-value="record._get_complement_waybill_locations()"/>
                      <t t-set="remolques" t-value="record._get_complement_waybill_type_federal_add_trailers()"/>
-                     <t t-set="operadores" t-value="record._get_complement_waybill_figure_transport_add_drivers()"/>
-                     <t t-set="propietario" t-value="record._get_complement_waybill_figure_transport_add_owner()"/>
-                     <t t-set="arrendatario" t-value="record._get_complement_waybill_figure_transport_add_lessee()"/>
-                     <t t-set="notificado" t-value="record._get_complement_waybill_figure_transport_add_notified()"/>
-                     <cartaporte:CartaPorte
-                     xsi:schemaLocation="http://www.sat.gob.mx/CartaPorte http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte.xsd"
-                     xmlns:cartaporte="http://www.sat.gob.mx/CartaPorte" t-att-TotalDistRec="record.tipo_transporte_code in ('01','04') and record.travel_total_distance or False" t-att-TranspInternac="'Sí' if record.international_shipping == 'SI' else 'No'" t-att-EntradaSalidaMerc="record.international_shipping == 'SI' and record.shipping_complement_type or False" t-att-ViaEntradaSalida="record.international_shipping == 'SI' and record.tipo_transporte_code or False" Version="1.0" >
-                        <cartaporte:Ubicaciones>
-                            <cartaporte:Ubicacion t-att-TipoEstacion="location_origin['TipoEstacion']">
-                                <cartaporte:Origen t-att-FechaHoraSalida="location_origin['cartaporte:Origen']['FechaHoraSalida']" t-att-NombreRemitente="location_origin['cartaporte:Origen']['NombreRemitente']" t-att-RFCRemitente="location_origin['cartaporte:Origen']['RFCRemitente']" t-att-NumEstacion="record.tipo_transporte_code in ('02','03','04') and record.waybill_origin_station_id.code_identification or False" t-att-NombreEstacion="record.tipo_transporte_code in ('02','03','04') and record.waybill_origin_station_id.name or False"/>
-                                <cartaporte:Domicilio t-att-Calle="location_origin['cartaporte:Domicilio']['Calle']" t-att-CodigoPostal="location_origin['cartaporte:Domicilio']['CodigoPostal']" t-att-Colonia="location_origin['cartaporte:Domicilio']['Colonia']" t-att-Estado="location_origin['cartaporte:Domicilio']['Estado']" t-att-Localidad="location_origin['cartaporte:Domicilio']['Localidad']" t-att-Municipio="location_origin['cartaporte:Domicilio']['Municipio']" t-att-NumeroExterior="location_origin['cartaporte:Domicilio']['NumeroExterior']" t-att-NumeroInterior="location_origin['cartaporte:Domicilio']['NumeroInterior']" t-att-Pais="location_origin['cartaporte:Domicilio']['Pais']" t-att-Referencia="location_origin['cartaporte:Domicilio']['Referencia']"/>
-                            </cartaporte:Ubicacion>
-                            <cartaporte:Ubicacion t-att-DistanciaRecorrida="location_destiny['DistanciaRecorrida']" t-att-TipoEstacion="location_destiny['TipoEstacion']">
-                                <cartaporte:Destino t-att-FechaHoraProgLlegada="location_destiny['cartaporte:Destino']['FechaHoraProgLlegada']" t-att-NombreDestinatario="location_destiny['cartaporte:Destino']['NombreDestinatario']" t-att-RFCDestinatario="location_destiny['cartaporte:Destino']['RFCDestinatario']" t-att-NumEstacion="record.tipo_transporte_code in ('02','03','04') and record.waybill_destiny_station_id.code_identification or False" t-att-NombreEstacion="record.tipo_transporte_code in ('02','03','04') and record.waybill_destiny_station_id.name or False"/>
-                                <cartaporte:Domicilio t-att-Calle="location_destiny['cartaporte:Domicilio']['Calle']" t-att-CodigoPostal="location_destiny['cartaporte:Domicilio']['CodigoPostal']" t-att-Colonia="location_destiny['cartaporte:Domicilio']['Colonia']" t-att-Estado="location_destiny['cartaporte:Domicilio']['Estado']" t-att-Localidad="location_destiny['cartaporte:Domicilio']['Localidad']" t-att-Municipio="location_destiny['cartaporte:Domicilio']['Municipio']" t-att-NumeroExterior="location_destiny['cartaporte:Domicilio']['NumeroExterior']" t-att-NumeroInterior="location_destiny['cartaporte:Domicilio']['NumeroInterior']" t-att-Pais="location_destiny['cartaporte:Domicilio']['Pais']" t-att-Referencia="location_destiny['cartaporte:Domicilio']['Referencia']"/>
-                            </cartaporte:Ubicacion>
-                        </cartaporte:Ubicaciones>
-                        <cartaporte:Mercancias t-att-NumTotalMercancias="transported_products['NumTotalMercancias']" t-att-CargoPorTasacion="transported_products['CargoPorTasacion']" t-att-PesoBrutoTotal="record.tipo_transporte_code=='03' and record.weight_charge_total or False" t-att-UnidadPeso="record.tipo_transporte_code=='03' and 'KGM' or False">
-                            <t t-foreach="transported_products['cartaporte:Mercancias']" t-as="item">
-                                <cartaporte:Mercancia t-att-BienesTransp="item['BienesTransp']" t-att-Cantidad="item['Cantidad']" t-att-ClaveSTCC="item['ClaveSTCC']" t-att-ClaveUnidad="item['ClaveUnidad']" t-att-Descripcion="item['Descripcion']" t-att-Dimensiones="item['Dimensiones']" t-att-Moneda="item['Moneda']" t-att-PesoEnKg="item['PesoEnKg']" t-att-MaterialPeligroso="item['MaterialPeligroso']" t-att-CveMaterialPeligroso="item['CveMaterialPeligroso']" t-att-ValorMercancia="item['ValorMercancia']" t-att-FraccionArancelaria="record.international_shipping=='SI' and item['FraccionArancelaria'] or False" />
+                     <t t-set="figurastransporte" t-value="record._get_complement_waybill_figure_transport()"/>
+                     <cartaporte20:CartaPorte
+                     xsi:schemaLocation="http://www.sat.gob.mx/CartaPorte20 http://www.sat.gob.mx/sitio_internet/cfd/CartaPorte/CartaPorte20.xsd"
+                         xmlns:cartaporte20="http://www.sat.gob.mx/CartaPorte20" t-att-TotalDistRec="record.tipo_transporte_code in ('01','04') and record.travel_total_distance or False" t-att-TranspInternac="'Sí' if record.international_shipping == 'SI' else 'No'" Version="2.0" t-att-EntradaSalidaMerc="record.shipping_complement_type if record.international_shipping == 'SI' else False" t-att-PaisOrigenDestino="record.merchandice_country_origin_id.l10n_mx_edi_code if record.international_shipping == 'SI' else False" t-att-ViaEntradaSalida="record.tipo_transporte_entrada_salida_id.code if record.international_shipping == 'SI' else False" >
+                        <cartaporte20:Ubicaciones>
+                            <t t-foreach="ubicaciones['cartaporte20:Ubicaciones']" t-as="ubicacion">
+                                <cartaporte20:Ubicacion 
+                                        t-att-TipoUbicacion="ubicacion['cartaporte20:Ubicacion']['TipoUbicacion']"
+                                        t-att-RFCRemitenteDestinatario="ubicacion['cartaporte20:Ubicacion']['RFCRemitenteDestinatario']"
+                                        t-att-NombreRemitenteDestinatario="ubicacion['cartaporte20:Ubicacion']['NombreRemitenteDestinatario']"
+                                        t-att-FechaHoraSalidaLlegada="ubicacion['cartaporte20:Ubicacion']['FechaHoraSalidaLlegada']"
+                                        t-att-IDUbicacion="ubicacion['cartaporte20:Ubicacion']['IDUbicacion']"
+                                        t-att-NumRegIdTrib="ubicacion['cartaporte20:Ubicacion']['NumRegIdTrib']"
+                                        t-att-ResidenciaFiscal="ubicacion['cartaporte20:Ubicacion']['ResidenciaFiscal']"
+                                        t-att-NumEstacion="ubicacion['cartaporte20:Ubicacion']['NumEstacion']"
+                                        t-att-NombreEstacion="ubicacion['cartaporte20:Ubicacion']['NombreEstacion']"
+                                        t-att-TipoEstacion="ubicacion['cartaporte20:Ubicacion']['TipoEstacion']"
+                                        t-att-DistanciaRecorrida="ubicacion['cartaporte20:Ubicacion']['DistanciaRecorrida']">
+                                    <cartaporte20:Domicilio  
+                                            t-att-Estado="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Estado']"
+                                            t-att-Pais="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Pais']"
+                                            t-att-CodigoPostal="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['CodigoPostal']"
+                                            t-att-Calle="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Calle']"
+                                            t-att-NumeroExterior="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['NumeroExterior']"
+                                            t-att-NumeroInterior="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['NumeroInterior']"
+                                            t-att-Colonia="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Colonia']"
+                                            t-att-Localidad="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Localidad']"
+                                            t-att-Municipio="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Municipio']"
+                                            t-att-Referencia="ubicacion['cartaporte20:Ubicacion']['cartaporte20:Domicilio']['Referencia']"
+                                            />
+                                </cartaporte20:Ubicacion>
+                            </t>
+                        </cartaporte20:Ubicaciones>
+                        <cartaporte20:Mercancias t-att-NumTotalMercancias="transported_products['NumTotalMercancias']" t-att-CargoPorTasacion="transported_products['CargoPorTasacion']" t-att-PesoBrutoTotal="transported_products['PesoBrutoTotal']" t-att-PesoNetoTotal="transported_products['PesoNetoTotal']" t-att-UnidadPeso="transported_products['UnidadPeso']">
+                            <t t-foreach="transported_products['cartaporte20:Mercancias']" t-as="item">
+                                <cartaporte20:Mercancia t-att-BienesTransp="item['BienesTransp']"
+                                    t-att-Descripcion="item['Descripcion']" 
+                                    t-att-Cantidad="item['Cantidad']" 
+                                    t-att-ClaveUnidad="item['ClaveUnidad']" 
+                                    t-att-Unidad="item['Unidad']" 
+                                    t-att-ClaveSTCC="item['ClaveSTCC']" 
+                                    t-att-Dimensiones="item['Dimensiones']" 
+                                    t-att-PesoEnKg="item['PesoEnKg']" 
+                                    t-att-MaterialPeligroso="item['MaterialPeligroso']" 
+                                    t-att-CveMaterialPeligroso="item['CveMaterialPeligroso']" 
+                                    t-att-Moneda="item['Moneda']" 
+                                    t-att-ValorMercancia="item['ValorMercancia']" 
+                                    t-att-Embalaje="item['Embalaje']" 
+                                    t-att-DescripEmbalaje="item['DescripEmbalaje']" 
+                                    t-att-FraccionArancelaria="item['FraccionArancelaria']" 
+                                    t-att-UUIDComercioExt="item['UUIDComercioExt']">
+                                    <t t-foreach="item['cartaporte20:Pedimentos']" t-as="pedimento">
+                                        <cartaporte20:Pedimentos t-att-Pedimento="pedimento['Pedimento']" />
+                                    </t>
+                                    <t t-foreach="item['cartaporte20:CantidadTransporta']" t-as="transporta">
+                                        <cartaporte20:CantidadTransporta t-att-Cantidad="transporta['Cantidad']" t-att-IDOrigen="transporta['IDOrigen']" t-att-IDDestino="transporta['IDDestino']"  />
+                                    </t>                                        
+                                </cartaporte20:Mercancia>
                             </t>
                             <t t-if="record.tipo_transporte_code=='01'">
-                                <cartaporte:AutotransporteFederal t-att-NombreAseg="autotransporte_federal['NombreAseg']" t-att-NumPermisoSCT="autotransporte_federal['NumPermisoSCT']" t-att-NumPolizaSeguro="autotransporte_federal['NumPolizaSeguro']" t-att-PermSCT="autotransporte_federal['PermSCT']">
-                                    <cartaporte:IdentificacionVehicular t-att-AnioModeloVM="autotransporte_federal['cartaporte:IdentificacionVehicular']['AnioModeloVM']" t-att-ConfigVehicular="autotransporte_federal['cartaporte:IdentificacionVehicular']['ConfigVehicular']" t-att-PlacaVM="autotransporte_federal['cartaporte:IdentificacionVehicular']['PlacaVM']"/>
-                                    <cartaporte:Remolques t-if="record.trailer_line_ids">
-                                        <t t-foreach="remolques" t-as="remolque">
-                                            <cartaporte:Remolque t-att-Placa="remolque['Placa']" t-att-SubTipoRem="remolque['SubTipoRem']"/>
+                                <cartaporte20:Autotransporte t-att-NumPermisoSCT="autotransporte_federal['NumPermisoSCT']" t-att-PermSCT="autotransporte_federal['PermSCT']">
+                                    <cartaporte20:IdentificacionVehicular t-att-ConfigVehicular="autotransporte_federal['cartaporte20:IdentificacionVehicular']['ConfigVehicular']" t-att-PlacaVM="autotransporte_federal['cartaporte20:IdentificacionVehicular']['PlacaVM']" t-att-AnioModeloVM="autotransporte_federal['cartaporte20:IdentificacionVehicular']['AnioModeloVM']"/>
+                                    <t t-if="record.insurance_ids">
+                                        <t t-foreach="autotransporte_federal['cartaporte20:Seguros']" t-as="insurance">
+                                            <cartaporte20:Seguros t-att-AseguraRespCivil="insurance['AseguraRespCivil']"
+                                                                  t-att-PolizaRespCivil="insurance['PolizaRespCivil']"
+                                                                  t-att-AseguraMedAmbiente="insurance['AseguraMedAmbiente']"
+                                                                  t-att-PolizaMedAmbiente="insurance['PolizaMedAmbiente']"
+                                                                  t-att-AseguraCarga="insurance['AseguraCarga']"
+                                                                  t-att-PolizaCarga="insurance['PolizaCarga']"
+                                                                  t-att-PrimaSeguro="insurance['PrimaSeguro']"/>
                                         </t>
-                                    </cartaporte:Remolques>
-                                </cartaporte:AutotransporteFederal>
+                                    </t>
+                                    <cartaporte20:Remolques t-if="record.trailer_line_ids">
+                                        <t t-foreach="remolques" t-as="remolque">
+                                            <cartaporte20:Remolque t-att-SubTipoRem="remolque['SubTipoRem']" t-att-Placa="remolque['Placa']"/>
+                                        </t>
+                                    </cartaporte20:Remolques>
+                                </cartaporte20:Autotransporte>
                             </t>
                             <t t-if="record.tipo_transporte_code=='03'">
-                                <cartaporte:TransporteAereo t-att-PermSCT="record.type_stc_permit_id.code" t-att-NumPermisoSCT="record.type_stc_permit_number" t-att-NombreAseg="record.partner_insurance_id.name" t-att-NumPolizaSeguro="record.partner_insurance_number" t-att-MatriculaAeronave="record.vehicle_plate_cp" t-att-NumeroGuia="record.waybill_num_guia_aereo" LugarContrato="Opcional" t-att-CodigoTransportista="record.codigo_transportista_aereo_id.code"  t-att-RFCTransportista="record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code=='MEX' and record.waybill_transportista_aereo_id.vat or False" t-att-NumRegIdTribTranspor="record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code!='MEX' and record.waybill_transportista_aereo_id.vat or False" t-att-RFCEmbarcador="record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code=='MEX' and record.waybill_embarcador_aereo_id.vat or False" t-att-NumRegIdTribEmbarc="record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code!='MEX' and record.waybill_embarcador_aereo_id.vat or False" t-att-ResidenciaFiscalEmbarc="False and record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code" t-att-ResidenciaFiscalTranspor="False and record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code" t-att-NombreEmbarcador="record.waybill_embarcador_aereo_id.name"/>
+                                <cartaporte20:TransporteAereo t-att-PermSCT="record.type_stc_permit_id.code" t-att-NumPermisoSCT="record.type_stc_permit_number" t-att-NombreAseg="record.partner_insurance_id.name" t-att-NumPolizaSeguro="record.partner_insurance_number" t-att-MatriculaAeronave="record.vehicle_plate_cp" t-att-NumeroGuia="record.waybill_num_guia_aereo" LugarContrato="Opcional" t-att-CodigoTransportista="record.codigo_transportista_aereo_id.code"  t-att-RFCTransportista="record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code=='MEX' and record.waybill_transportista_aereo_id.vat or False" t-att-NumRegIdTribTranspor="record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code!='MEX' and record.waybill_transportista_aereo_id.vat or False" t-att-RFCEmbarcador="record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code=='MEX' and record.waybill_embarcador_aereo_id.vat or False" t-att-NumRegIdTribEmbarc="record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code!='MEX' and record.waybill_embarcador_aereo_id.vat or False" t-att-ResidenciaFiscalEmbarc="False and record.waybill_embarcador_aereo_id.country_id.l10n_mx_edi_code" t-att-ResidenciaFiscalTranspor="False and record.waybill_transportista_aereo_id.country_id.l10n_mx_edi_code" t-att-NombreEmbarcador="record.waybill_embarcador_aereo_id.name"/>
                             </t>
-                        </cartaporte:Mercancias>
-                        <cartaporte:FiguraTransporte t-att-CveTransporte="record.tipo_transporte_id.code">
-                            <t t-if="record.tipo_transporte_code=='01'">
-                                <cartaporte:Operadores>
-                                    <t t-foreach="operadores" t-as="operador">
-                                        <cartaporte:Operador t-att-NombreOperador="operador['NombreOperador']" t-att-NumLicencia="operador['NumLicencia']" t-att-RFCOperador="operador['RFCOperador']" t-att-ResidenciaFiscalOperador="operador['ResidenciaFiscalOperador']"/>
-                                    </t>
-                                </cartaporte:Operadores>
+                        </cartaporte20:Mercancias>
+                        <cartaporte20:FiguraTransporte>
+                            <t t-foreach="figurastransporte" t-as="figura">
+                                <cartaporte20:TiposFigura 
+                                    t-att-TipoFigura="figura['cartaporte20:TiposFigura']['TipoFigura']"
+                                    t-att-NombreFigura="figura['cartaporte20:TiposFigura']['NombreFigura']"
+                                    t-att-NumLicencia="figura['cartaporte20:TiposFigura']['NumLicencia']"
+                                    t-att-ResidenciaFiscalFigura="figura['cartaporte20:TiposFigura']['ResidenciaFiscalFigura']"
+                                    t-att-NumRegIdTribFigura="figura['cartaporte20:TiposFigura']['NumRegIdTribFigura']"
+                                    t-att-RFCFigura="figura['cartaporte20:TiposFigura']['RFCFigura']"
+                                    >
+                                        <t t-foreach="figura['cartaporte20:TiposFigura']['cartaporte20:PartesTransporte']" t-as="parte">
+                                            <cartaporte20:PartesTransporte t-att-ParteTransporte="parte['ParteTransporte']"/>
+                                        </t>
+                                        <cartaporte20:Domicilio 
+                                                t-att-Estado="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Estado']" 
+                                                t-att-Pais="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Pais']" 
+                                                t-att-CodigoPostal="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['CodigoPostal']" 
+                                                t-att-Calle="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Calle']"
+                                                t-att-NumeroExterior="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['NumeroExterior']"
+                                                t-att-NumeroInterior="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['NumeroInterior']"
+                                                t-att-Colonia="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Colonia']"
+                                                t-att-Localidad="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Localidad']"
+                                                t-att-Municipio="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']['Municipio']"
+                                                t-if="figura['cartaporte20:TiposFigura']['cartaporte20:Domicilio']"/>
+                                </cartaporte20:TiposFigura> 
                             </t>
-                            <cartaporte:Propietario t-if="propietario" t-att-RFCPropietario="propietario['RFCPropietario']" t-att-NombrePropietario="propietario['NombrePropietario']" t-att-ResidenciaFiscalPropietario="propietario['ResidenciaFiscalPropietario']"></cartaporte:Propietario>
-                            <cartaporte:Arrendatario t-if="arrendatario" t-att-RFCArrendatario="arrendatario['RFCArrendatario']" t-att-NombreArrendatario="arrendatario['NombreArrendatario']" t-att-ResidenciaFiscalArrendatario="arrendatario['ResidenciaFiscalArrendatario']"> </cartaporte:Arrendatario>
-                            <cartaporte:Notificado t-if="notificado" t-att-RFCNotificado="notificado['RFCNotificado']" t-att-NombreNotificado="notificado['NombreNotificado']" t-att-ResidenciaFiscalNotificado="notificado['ResidenciaFiscalNotificado']"> </cartaporte:Notificado>
-                        </cartaporte:FiguraTransporte>
-                    </cartaporte:CartaPorte>
+                        </cartaporte20:FiguraTransporte>
+                    </cartaporte20:CartaPorte>
                 </cfdi:Complemento>
             </t>
         </xpath>

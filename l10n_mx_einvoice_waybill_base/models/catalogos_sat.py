@@ -1,6 +1,20 @@
 # -*- encoding: utf-8 -*-
-#    Coded by: german_442 email: (german.ponce@argil.mx)
-##############################################################################
+# Coded by German Ponce Dominguez 
+#     ▬▬▬▬▬.◙.▬▬▬▬▬  
+#       ▂▄▄▓▄▄▂  
+#    ◢◤█▀▀████▄▄▄▄▄▄ ◢◤  
+#    █▄ █ █▄ ███▀▀▀▀▀▀▀ ╬  
+#    ◥ █████ ◤  
+#     ══╩══╩═  
+#       ╬═╬  
+#       ╬═╬ Dream big and start with something small!!!  
+#       ╬═╬  
+#       ╬═╬ You can do it!  
+#       ╬═╬   Let's go...
+#    ☻/ ╬═╬   
+#   /▌  ╬═╬   
+#   / \
+# Cherman Seingalt - german.ponce@outlook.com
 
 from odoo import api, fields, models, _, tools
 from datetime import datetime, date
@@ -12,6 +26,127 @@ from odoo.osv import osv, expression
 
 import logging
 _logger = logging.getLogger(__name__)
+
+###### Parte Transporte ######
+
+class WaybillParteEmbalaje(models.Model):
+    _name = "waybill.parte.transporte"
+    _description = "Carta Porte -  Parte Transporte"
+    _rec_name = 'code' 
+
+    code      = fields.Char("Clave de designación", required=True, size=128 )
+    name            = fields.Char('Descripción', size=128, required=True )
+    # patente_id      = fields.Many2one('sat.patente', string="Patente Aduanal", required=True )
+    start_date = fields.Date(string="Inicio de Vigencia", required=True, default="2021-06-01")
+    end_date    = fields.Date(string="Fin de Vigencia", required=False)
+    
+
+    _sql_constraints = [
+        ('code_unique', 'unique(code)',
+         'El Código debe ser único')]
+    
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        domain = []
+        if name:
+            domain = ['|', ('code', '=ilike', name.split(' ')[0] + '%'), ('name', operator, name)]
+            if operator in expression.NEGATIVE_TERM_OPERATORS:
+                domain = ['&', '!'] + domain[1:]
+            return self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
+
+        return super(WaybillParteEmbalaje, self)._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+
+
+    @api.depends('name', 'code')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.name and rec.code:
+                name = '[ '+rec.code+' ]' + ' ' + rec.name
+                result.append((rec.id, name))
+        return result
+
+###### Figura Transporte ######
+
+class WaybillFiguraTransporte(models.Model):
+    _name = "waybill.figura.transporte"
+    _description = "Carta Porte -  Figura Transporte"
+    _rec_name = 'code' 
+
+    code      = fields.Char("Clave de designación", required=True, size=128 )
+    name            = fields.Char('Descripción', size=128, required=True )
+    # patente_id      = fields.Many2one('sat.patente', string="Patente Aduanal", required=True )
+    start_date = fields.Date(string="Inicio de Vigencia", required=True, default="2021-06-01")
+    end_date    = fields.Date(string="Fin de Vigencia", required=False)
+    
+
+    _sql_constraints = [
+        ('code_unique', 'unique(code)',
+         'El Código debe ser único')]
+    
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        domain = []
+        if name:
+            domain = ['|', ('code', '=ilike', name.split(' ')[0] + '%'), ('name', operator, name)]
+            if operator in expression.NEGATIVE_TERM_OPERATORS:
+                domain = ['&', '!'] + domain[1:]
+            return self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
+
+        return super(WaybillFiguraTransporte, self)._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+
+
+    @api.depends('name', 'code')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.name and rec.code:
+                name = '[ '+rec.code+' ]' + ' ' + rec.name
+                result.append((rec.id, name))
+        return result
+        
+###### Unidades Peso ######
+
+class WaybillUnidadPeso(models.Model):
+    _name = "waybill.unidad.peso"
+    _description = "Carta Porte - Unidades de Peso"
+    _rec_name = 'code' 
+
+    code      = fields.Char("Clave", required=True, size=128 )
+    name      = fields.Char('Descripción', size=128, required=True )
+    comments  = fields.Text('Notas')
+    start_date  = fields.Date(string="Inicio de Vigencia", required=False, default="2021-06-01")
+    end_date    = fields.Date(string="Fin de Vigencia", required=False)
+    simbol      = fields.Char('Simbolo', size=128, required=False )
+    bandera     = fields.Char('Bandera', size=128, required=False )
+
+    _sql_constraints = [
+        ('code_unique', 'unique(code)',
+         'El Código debe ser único')]
+
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100, name_get_uid=None):
+        args = args or []
+        domain = []
+        if name:
+            domain = ['|', ('code', '=ilike', name.split(' ')[0] + '%'), ('name', operator, name)]
+            if operator in expression.NEGATIVE_TERM_OPERATORS:
+                domain = ['&', '!'] + domain[1:]
+            return self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
+
+        return super(WaybillUnidadPeso, self)._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+
+
+    @api.depends('name', 'code')
+    def name_get(self):
+        result = []
+        for rec in self:
+            if rec.name and rec.code:
+                name = '[ '+rec.code+' ]' + ' ' + rec.name
+                result.append((rec.id, name))
+        return result
 
 
 ###### Tipo de Permiso ######

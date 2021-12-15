@@ -1,4 +1,20 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
+# Coded by German Ponce Dominguez 
+#     ▬▬▬▬▬.◙.▬▬▬▬▬  
+#       ▂▄▄▓▄▄▂  
+#    ◢◤█▀▀████▄▄▄▄▄▄ ◢◤  
+#    █▄ █ █▄ ███▀▀▀▀▀▀▀ ╬  
+#    ◥ █████ ◤  
+#     ══╩══╩═  
+#       ╬═╬  
+#       ╬═╬ Dream big and start with something small!!!  
+#       ╬═╬  
+#       ╬═╬ You can do it!  
+#       ╬═╬   Let's go...
+#    ☻/ ╬═╬   
+#   /▌  ╬═╬   
+#   / \
+# Cherman Seingalt - german.ponce@outlook.com
 
 {
     "name"      : "Catalogos Base para Complemento de Carta Porte",
@@ -40,6 +56,9 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
                 'data/waybill.materiales.peligrosos.csv',
                 'data/waybill.tipo.embalaje.csv',
                 'data/waybill.tipo.permiso.csv',
+                'data/waybill.unidad.peso.csv',
+                'data/waybill.parte.transporte.csv',
+                'data/waybill.figura.transporte.csv',
     ],
 
     "installable": True,

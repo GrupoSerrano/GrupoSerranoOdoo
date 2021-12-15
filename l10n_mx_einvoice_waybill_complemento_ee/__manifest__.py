@@ -1,4 +1,20 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
+# Coded by German Ponce Dominguez 
+#     ▬▬▬▬▬.◙.▬▬▬▬▬  
+#       ▂▄▄▓▄▄▂  
+#    ◢◤█▀▀████▄▄▄▄▄▄ ◢◤  
+#    █▄ █ █▄ ███▀▀▀▀▀▀▀ ╬  
+#    ◥ █████ ◤  
+#     ══╩══╩═  
+#       ╬═╬  
+#       ╬═╬ Dream big and start with something small!!!  
+#       ╬═╬  
+#       ╬═╬ You can do it!  
+#       ╬═╬   Let's go...
+#    ☻/ ╬═╬   
+#   /▌  ╬═╬   
+#   / \
+# Cherman Seingalt - german.ponce@outlook.com
 
 {
     "name"      : "Complemento de Carta Porte - EE",
@@ -17,8 +33,8 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
 """,
     
     "depends": [
-        "hr",
         "l10n_mx_edi",
+        "l10n_mx_edi_extend",
         "product_unspsc",
         "l10n_mx_einvoice_waybill_base",
         "l10n_mx_einvoice_waybill_base_address_data",
@@ -30,8 +46,8 @@ Este modulo permite incorporar el CFDI de Traslado para la Facturación Electron
                 'wizard/sat_catalogos_wizard_view.xml',
                 'views/account_view.xml',
                 'views/product_view.xml',
-                'views/hr_view.xml',
                 'views/res_partner_view.xml',
+                'views/res_company_view.xml',
                 'data/waybill_complement.xml',
                 'reports/invoice_facturae.xml',
     ],

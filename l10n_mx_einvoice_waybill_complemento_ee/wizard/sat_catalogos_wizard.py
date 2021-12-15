@@ -1,4 +1,20 @@
 # -*- encoding: utf-8 -*-
+# Coded by German Ponce Dominguez 
+#     ▬▬▬▬▬.◙.▬▬▬▬▬  
+#       ▂▄▄▓▄▄▂  
+#    ◢◤█▀▀████▄▄▄▄▄▄ ◢◤  
+#    █▄ █ █▄ ███▀▀▀▀▀▀▀ ╬  
+#    ◥ █████ ◤  
+#     ══╩══╩═  
+#       ╬═╬  
+#       ╬═╬ Dream big and start with something small!!!  
+#       ╬═╬  
+#       ╬═╬ You can do it!  
+#       ╬═╬   Let's go...
+#    ☻/ ╬═╬   
+#   /▌  ╬═╬   
+#   / \
+# Cherman Seingalt - german.ponce@outlook.com
 
 from odoo import api, fields, models, _
 
@@ -9,6 +25,9 @@ class SAT_CatalogosWizard(models.TransientModel):
     _description = 'Catalogos del SAT para Complemento de Carta Porte'
 
     catalogo = fields.Selection([
+                                                ('action_waybill_parte_transporte', 'Partes Transporte'),
+                                                ('action_waybill_figura_transporte', 'Figuras Transporte'),
+                                                ('action_waybill_unidad_peso', 'Unidades de Peso'),
                                                 ('action_waybill_tipo_contenedor', 'Tipos de Contenedor'),
                                                 ('action_waybill_tipo_permiso', 'Tipos de Permiso'),
                                                 ('action_waybill_tipo_embalaje', 'Tipos de Embalaje'),
@@ -32,10 +51,47 @@ class SAT_CatalogosWizard(models.TransientModel):
                                                 ('action_sat_country_zip_codes', 'Códigos Postales'),
                                                 ('action_sat_colonia_zip_codes', 'Colonias'),
 
-                                              ])   
+                                              ], string="Selecciona el Catalogo",
+                                                 ondelete={
+                                                    'action_waybill_parte_transporte': 'set default',
+                                                    'action_waybill_figura_transporte': 'set default',
+                                                    'action_waybill_unidad_peso': 'set default',
+                                                    'action_waybill_tipo_contenedor': 'set default',
+                                                    'action_waybill_tipo_permiso': 'set default',
+                                                    'action_waybill_tipo_embalaje': 'set default',
+                                                    'action_waybill_materiales_peligrosos': 'set default',
+                                                    'action_waybill_clave_transporte': 'set default',
+                                                    'action_waybill_complemento_estacion': 'set default',
+                                                    'action_waybill_tipo_estacion': 'set default',
+                                                    'action_waybill_configuracion_autotransporte_federal': 'set default',
+                                                    'action_waybill_tipo_remolque': 'set default',
+                                                    'action_waybill_configuracion_maritima': 'set default',
+                                                    'action_waybill_tipo_carga': 'set default',
+                                                    'action_waybill_contenedor_maritimo': 'set default',
+                                                    'action_waybill_numero_autorizacion_naviera': 'set default',
+                                                    'action_waybill_waybill_codigo_transporte_aereo': 'set default',
+                                                    'action_waybill_productos_stcc': 'set default',
+                                                    'action_waybill_tipo_servicio': 'set default',
+                                                    'action_waybill_codigo_derecho_paso': 'set default',
+                                                    'action_waybill_tipo_carro': 'set default',
+                                                    'action_sat_country_zip_codes': 'set default',
+                                                    'action_sat_colonia_zip_codes': 'set default',
+                                                          })   
 
     def open_catalog(self):
         data = {
+                'action_waybill_parte_transporte': {
+                                                    'tree': 'waybill_parte_transporte_tree',
+                                                    'form': 'waybill_parte_transporte_form',
+                                                    },
+                'action_waybill_figura_transporte': {
+                                                    'tree': 'waybill_figura_transporte_tree',
+                                                    'form': 'waybill_figura_transporte_form',
+                                                    },
+                'action_waybill_unidad_peso': {
+                                                    'tree': 'waybill_unidad_peso_tree',
+                                                    'form': 'waybill_unidad_peso_form',
+                                                    },
                 'action_waybill_tipo_contenedor': {
                                                     'tree': 'waybill_tipo_contenedor_tree',
                                                     'form': 'waybill_tipo_contenedor_form',
