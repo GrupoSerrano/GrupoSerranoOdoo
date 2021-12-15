@@ -31,7 +31,7 @@ class AccountEdiFormat(models.Model):
                 invoice.invoice_payment_term_id = False
             res.update({
                          'document_type': 'T',
-                         'payment_method_code': '99',
+                         'payment_method_code': False,
                          'payment_policy': False,
                          'total_tax_details_transferred': False,
                          'total_tax_details_withholding': False,

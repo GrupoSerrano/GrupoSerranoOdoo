@@ -11,6 +11,9 @@
                 <field name="unspsc_code_id" position="after">
                     <field name="clave_stcc_id" 
                                    options="{'no_create_edit': True,'no_create': True}" />
+                    <field name="tipo_embalaje_id" />
+                    <field name="hazardous_material" />
+                    <field name="hazardous_key_product_id" attrs="{'required':[('hazardous_material','=','Si')],'readonly':[('hazardous_material','=','No')]}"  options="{'no_create': True, 'no_create_edit': True}"/>
                 </field>
             </field>
         </record>

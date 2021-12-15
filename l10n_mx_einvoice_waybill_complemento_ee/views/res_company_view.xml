@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="res_company_form_inherit_l10n_mx_edi_ccp">
+            <field name="name">res.company.form.ccp</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="l10n_mx_edi.res_company_form_inherit_l10n_mx_edi"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[2]" position="replace">
+                    <div attrs="{'invisible':[('country_code_rel','!=','MX')]}">
+                        <field name="country_code_rel" invisible="1"/>
+                        <field name="city_id" invisible="1"/>
+                        <div class="oe_edit_only">
+                            <field name="zip_sat_id" placeholder="Codigo Postal" 
+                                   class="oe_edit_only"
+                                       options="{'no_create_edit': True,'no_create': True}" 
+                                       attrs="{'invisible':[('country_code_rel','!=','MX')]}"/>
+                            <field name="l10n_mx_edi_colony" invisible="1" force_save="1"/>
+                        </div>
+                    </div>
+                    <div class="oe_edit_only" attrs="{'invisible':[('country_code_rel','!=','MX')]}">
+                        <field name="colonia_sat_id" options="{'no_create_edit': True,'no_create': True}" 
+                               class="oe_edit_only o_address_street"
+                               domain="[('zip_sat_code','=',zip_sat_id)]"
+                               placeholder="Colonia..."
+                               attrs="{'invisible':[('country_code_rel','!=','MX')]}" />
+                        <field name="l10n_mx_edi_colony_code" invisible="1" force_save="1"/>
+                    </div>
+                </xpath>
+                <!--
+                <field name="l10n_mx_edi_colony" position="replace">
+                    <field name="country_code_rel" invisible="1"/>
+                    <field name="colonia_sat_id" options="{'no_create_edit': True,'no_create': True}" placeholder="Colonia..." attrs="{'invisible':[('country_code_rel','!=','MX')]}" />
+                    <field name="l10n_mx_edi_colony"  attrs="{'invisible':[('country_code_rel','=','MX')]}" force_save="1"/>
+                </field>
+                <field name="city" position="replace">
+                    <field name="city" placeholder="Ciudad ..." class="o_address_city" 
+                           attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)], 'invisible':[('country_code_rel','=','MX')]}" force_save="1"/>
+
+                </field>
+                <field name="zip" position="replace">
+                    <field name="zip_sat_id" placeholder="Codigo Postal" class="o_address_zip" 
+                               options="{'no_create_edit': True,'no_create': True}" 
+                               attrs="{'invisible':[('country_code_rel','!=','MX')]}"/>
+
+                    <field name="zip" class="o_address_zip" 
+                           attrs="{'readonly': [('type', '=', 'contact'),('parent_id', '!=', False)], 'invisible':[('country_code_rel','=','MX')]}" force_save="1"/>
+                </field>
+                <field name="country_id" position="after">
+
+                </field>
+                -->
+            </field>
+        </record>
+
+    </data>
+</odoo>
