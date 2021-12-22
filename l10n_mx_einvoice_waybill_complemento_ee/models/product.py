@@ -51,7 +51,7 @@ class ProductTemplate(models.Model):
 
     dimensiones_plg = fields.Char('Dimensiones Pulgadas', compute="_get_dimensions_waybill")
 
-    hazardous_material = fields.Selection([('Si','Si'),('No','No')], string="Material Peligroso", default="No" )
+    hazardous_material = fields.Selection([('Sí','Sí'),('No','No')], string="Material Peligroso", default="No" )
     
     hazardous_key_product_id = fields.Many2one('waybill.materiales.peligrosos', 'Clave Material Peligroso')
     

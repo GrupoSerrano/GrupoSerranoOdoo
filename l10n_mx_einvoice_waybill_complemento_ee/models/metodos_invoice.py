@@ -107,8 +107,24 @@ class AccountEdiFormat(models.Model):
                 ### Eliminamos los Totales ####
                 subnode_cfdi_comprobante.setAttribute('Total', str(0))
                 subnode_cfdi_comprobante.setAttribute('SubTotal', str(0))
+                
+                #### Validando el Valor de la Mercancia o corrigiendo el nodo necesario valor 0.0 ####
+                if cfdi_minidom.getElementsByTagName('cartaporte20:Mercancia'):
+                    for node_mercancia in cfdi_minidom.getElementsByTagName('cartaporte20:Mercancia'):
+                        if not node_mercancia.getAttribute('ValorMercancia'):
+                            node_mercancia.setAttribute('ValorMercancia', str(0.0))
+
                 cfdi_custom = cfdi_minidom.toxml('UTF-8')
                 cfdi = cfdi_custom
+        else:
+            #### Validando el Valor de la Mercancia o corrigiendo el nodo necesario valor 0.0 ####
+            cfdi_minidom = minidom.parseString(cfdi)
+            if cfdi_minidom.getElementsByTagName('cartaporte20:Mercancia'):
+                for node_mercancia in cfdi_minidom.getElementsByTagName('cartaporte20:Mercancia'):
+                    if not node_mercancia.getAttribute('ValorMercancia'):
+                        node_mercancia.setAttribute('ValorMercancia', str(0.0))
+            cfdi_custom = cfdi_minidom.toxml('UTF-8')
+            cfdi = cfdi_custom
 
         #### Proceso Normal ####
         decoded_cfdi_values = invoice._l10n_mx_edi_decode_cfdi(cfdi_data=cfdi)
@@ -524,7 +540,7 @@ class AccountInvoice(models.Model):
 
             if loc_partner_country != 'MEX' and num_reg_trib:
                 loc_address_data.update({
-                                                'NumRegIdTrib': location_inst.id_location,
+                                                'NumRegIdTrib': num_reg_trib,
                                                 'ResidenciaFiscal': loc_partner_country,
                                             })
             else:
@@ -708,7 +724,7 @@ class AccountInvoice(models.Model):
 
             if loc_partner_country != 'MEX' and num_reg_trib:
                 loc_address_data.update({
-                                                'NumRegIdTrib': location_dest.num_reg_trib,
+                                                'NumRegIdTrib': num_reg_trib,
                                                 'ResidenciaFiscal': loc_partner_country,
                                             })
             else:
@@ -845,7 +861,7 @@ class AccountInvoice(models.Model):
                                             'PesoEnKg': False,
                                         })
             
-            if line.hazardous_material == 'Si':
+            if line.hazardous_material == 'Sí':
                 merchandise_data.update({
                                             'MaterialPeligroso': line.hazardous_material,
                                         })
@@ -1268,7 +1284,7 @@ class AccountInvoice(models.Model):
                     part_data  = {
                                         'ParteTransporte': part.code,
                                  }
-                    info_figure_list.append(vals_part)
+                    info_figure_list.append(part_data)
 
             info_figure.update({
                                         'cartaporte20:PartesTransporte': info_figure_list,
@@ -1628,7 +1644,7 @@ class AccountInvoice(models.Model):
 
         merchandice_country_origin_code = ""
         if self.merchandice_country_origin_id:
-            merchandice_country_origin_code = self.merchandice_country_origin_id.sat_code.code if self.merchandice_country_origin_id.sat_code else ""
+            merchandice_country_origin_code = self.merchandice_country_origin_id.l10n_mx_edi_code if self.merchandice_country_origin_id.l10n_mx_edi_code else ""
         worksheet.write(row, 4, "País de Origen/Destino (Código)", tags_data_gray_left_border)
         worksheet.write(row, 5, merchandice_country_origin_code, normal_left_border) # Cambiar
 
@@ -2042,7 +2058,7 @@ class AccountInvoice(models.Model):
 
         ### Mercancias ###
         row += 3
-        worksheet.write_merge(row, row, 0, 18, 'Mercancias', heading_format_left)
+        worksheet.write_merge(row, row, 0, 19, 'Mercancias', heading_format_left)
         row += 2
         worksheet.write(row, 0, "Peso Bruto Total", tags_data_gray_center_border)
         worksheet.write(row, 1, self.weight_charge_total if self.weight_charge_total else "", normal_left_border)
@@ -2064,13 +2080,14 @@ class AccountInvoice(models.Model):
         worksheet.write(row, 9, "Alto CM", tags_data_gray_center_border)
         worksheet.write(row, 10, "Material Peligroso", tags_data_gray_center_border)
         worksheet.write(row, 11, "Clave M.P.", tags_data_gray_center_border)
-        worksheet.write(row, 12, "Valor Mercancia", tags_data_gray_center_border)
-        worksheet.write(row, 13, "Clave Arancel", tags_data_gray_center_border)
-        worksheet.write(row, 14, "UUID Factura Comercio Ext.", tags_data_gray_center_border)
-        worksheet.write(row, 15, "Cantidad Transportada", tags_data_gray_center_border)
-        worksheet.write(row, 16, "Pedimento", tags_data_gray_center_border)
-        worksheet.write(row, 17, "ID Origen", tags_data_gray_center_border)
-        worksheet.write(row, 18, "ID Destino", tags_data_gray_center_border)
+        worksheet.write(row, 12, "Embalaje", tags_data_gray_center_border)
+        worksheet.write(row, 13, "Valor Mercancia", tags_data_gray_center_border)
+        worksheet.write(row, 14, "Clave Arancel", tags_data_gray_center_border)
+        worksheet.write(row, 15, "UUID Factura Comercio Ext.", tags_data_gray_center_border)
+        worksheet.write(row, 16, "Cantidad Transportada", tags_data_gray_center_border)
+        worksheet.write(row, 17, "Pedimento", tags_data_gray_center_border)
+        worksheet.write(row, 18, "ID Origen", tags_data_gray_center_border)
+        worksheet.write(row, 19, "ID Destino", tags_data_gray_center_border)
 
         for line in self.invoice_line_complement_cp_ids:
             default_code = ""
@@ -2130,7 +2147,8 @@ class AccountInvoice(models.Model):
                                           str(line.product_id.product_height if line.product_id else ''),
                                           str(line.product_id.product_width if line.product_id else ''),
                                           str(line.hazardous_material if line.hazardous_material else ''),
-                                          str(line.hazardous_key_product_id if line.hazardous_key_product_id else ''),
+                                          str(line.hazardous_key_product_id.code if line.hazardous_key_product_id else ''),
+                                          str(line.tipo_embalaje_id.code if line.tipo_embalaje_id else ''),
                                           str(line.charge_value if line.charge_value else ''),
                                           str(line.fraccion_arancelaria) if line.fraccion_arancelaria else "", # Arancel
                                           str(line.comercio_ext_uuid) if line.comercio_ext_uuid else "", # UUID CE
@@ -2141,6 +2159,7 @@ class AccountInvoice(models.Model):
                                     ]
                     else:
                         line_data = [
+                                          "",
                                           "",
                                           "",
                                           "",
@@ -2175,7 +2194,8 @@ class AccountInvoice(models.Model):
                               str(line.product_id.product_height if line.product_id else ''),
                               str(line.product_id.product_width if line.product_id else ''),
                               str(line.hazardous_material if line.hazardous_material else ''),
-                              str(line.hazardous_key_product_id if line.hazardous_key_product_id else ''),
+                              str(line.hazardous_key_product_id.code if line.hazardous_key_product_id else ''),
+                              str(line.tipo_embalaje_id.code if line.tipo_embalaje_id else ''),
                               str(line.charge_value if line.charge_value else ''),
                               str(line.fraccion_arancelaria) if line.fraccion_arancelaria else "", # Arancel
                               str(line.comercio_ext_uuid) if line.comercio_ext_uuid else "", # UUID CE
@@ -2205,6 +2225,7 @@ class AccountInvoice(models.Model):
             worksheet.write(row, 16, line_data[16], normal_left_border)
             worksheet.write(row, 17, line_data[17], normal_left_border)
             worksheet.write(row, 18, line_data[18], normal_left_border)
+            worksheet.write(row, 19, line_data[19], normal_left_border)
 
 
         invoice_name = self.name.replace('/','_') if self.name else 'SN'
