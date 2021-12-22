@@ -262,7 +262,7 @@ class WaybillMaterialesPeligrosos(models.Model):
     
 
     _sql_constraints = [
-        ('code_unique', 'unique(code)',
+        ('code_unique', 'CHECK(1=1)',
          'El Código debe ser único')]
 
 
