@@ -87,8 +87,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                             'product_uom_id': mercancia.product_id.uom_id.id,
                                             'name': mercancia.product_id.name_get()[0][1],
                                             'move_id': invoice.id,
-                                            'account_id': account_id if accounts else False,
-                                            'quantity': line.quantity,
+                                            'account_id': account_id.id if accounts else False,
+                                            'quantity': mercancia.quantity,
                                             'price_unit': 0.0,
                                         }
                     invoice_line_id = invoice_line.create(invoice_line_vals)
@@ -147,7 +147,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                           'clave_udm_sat', 'clave_stcc', 'peso_kg', 
                           'largo_cm', 'ancho_cm', 'alto_cm',
                           'material_peligroso', 
-                          'clave_material_peligroso', 'valor_mercancia',
+                          'clave_material_peligroso', 'embalaje',
+                          'valor_mercancia',
                           ######### Nuevos Datos ##########
                           'clave_arancel', 'uuid_factura_comercio_exterior',
                           'pedimento', # Pedimentos #
@@ -214,7 +215,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                                   str(line.product_id.product_height if line.product_id else ''),
                                                   str(line.product_id.product_width if line.product_id else ''),
                                                   str(line.hazardous_material if line.hazardous_material else ''),
-                                                  str(line.hazardous_key_product_id if line.hazardous_key_product_id else ''),
+                                                  str(line.hazardous_key_product_id.code if line.hazardous_key_product_id else ''),
+                                                  str(line.tipo_embalaje_id.code if line.tipo_embalaje_id else ''),
                                                   str(line.charge_value if line.charge_value else ''),
                                                   str(line.fraccion_arancelaria) if line.fraccion_arancelaria else "", # Arancel
                                                   str(line.comercio_ext_uuid) if line.comercio_ext_uuid else "", # UUID CE
@@ -225,6 +227,7 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                             ]]
                             else:
                                 line_data = [[
+                                                  "",
                                                   "",
                                                   "",
                                                   "",
@@ -262,7 +265,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                       str(line.product_id.product_height if line.product_id else ''),
                                       str(line.product_id.product_width if line.product_id else ''),
                                       str(line.hazardous_material if line.hazardous_material else ''),
-                                      str(line.hazardous_key_product_id if line.hazardous_key_product_id else ''),
+                                      str(line.hazardous_key_product_id.code if line.hazardous_key_product_id else ''),
+                                      str(line.tipo_embalaje_id.code if line.tipo_embalaje_id else ''),
                                       str(line.charge_value if line.charge_value else ''),
                                       str(line.fraccion_arancelaria) if line.fraccion_arancelaria else "", # Arancel
                                       str(line.comercio_ext_uuid) if line.comercio_ext_uuid else "", # UUID CE
@@ -296,7 +300,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                   'clave_udm_sat', 'clave_stcc', 'peso_kg', 
                   'largo_cm', 'ancho_cm', 'alto_cm',
                   'material_peligroso', 
-                  'clave_material_peligroso', 'valor_mercancia',
+                  'clave_material_peligroso', 'embalaje',
+                  'valor_mercancia',
                   ######### Nuevos Datos ##########
                   'clave_arancel', 'uuid_factura_comercio_exterior',
                   'pedimento', # Pedimentos #
@@ -371,10 +376,11 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                         'alto_cm'  : field[9],
                                         'material_peligroso'  : field[10],
                                         'clave_material_peligroso'  : field[11],
-                                        'valor_mercancia'  : field[12],
+                                        'embalaje'  : field[12],
+                                        'valor_mercancia'  : field[13],
                                         #### Nuevos Datos ####
-                                        'clave_arancel'  : field[13], # fraccion_arancelaria
-                                        'uuid_factura_comercio_exterior'  : field[14], # comercio_ext_uuid
+                                        'clave_arancel'  : field[14], # fraccion_arancelaria
+                                        'uuid_factura_comercio_exterior'  : field[15], # comercio_ext_uuid
 
                                         })
                         prev_line_complement_id = self.create_stcc_info(values)
@@ -518,6 +524,10 @@ class ImportLinesDetailWaybill(models.TransientModel):
         if product_record:
             if product_record.l10n_mx_edi_tariff_fraction_id:
                 fraccion_arancelaria = product_record.l10n_mx_edi_tariff_fraction_id.code
+        
+        #### Embalaje ####
+        embalaje = values.get('embalaje', False)
+        tipo_embalaje_id = self.find_embalaje_record(embalaje)
 
         data={
                 'product_id': product_record.id if product_record else False,
@@ -535,6 +545,8 @@ class ImportLinesDetailWaybill(models.TransientModel):
                 #### Nuevos Datos ###
                 'fraccion_arancelaria': fraccion_arancelaria,
                 'comercio_ext_uuid': comercio_ext_uuid,
+                ## Tipo Embajale ###
+                'tipo_embalaje_id': tipo_embalaje_id,
                 }
 
         line_complement_obj = self.env['invoice.line.complement.cp']
@@ -542,6 +554,17 @@ class ImportLinesDetailWaybill(models.TransientModel):
 
         return line_complement_id
 
+    def find_embalaje_record(self, code):
+        if not code:
+            return False
+        code=code.replace(' ','').replace('\n','')
+        tipo_embalaje_obj = self.env['waybill.tipo.embalaje']
+        #Odoo10 : Bussines Process into API Odoo v10 
+        tipo_embalaje_id = tipo_embalaje_obj.search([('code','ilike',code)], limit=1)
+        if not tipo_embalaje_id:
+            raise UserError("No se encontro información dentro del Catálogo de Tipos de Embalajes relacionados con la clave %s" % code)
+        return tipo_embalaje_id.id
+        
     def find_product_record(self, code):
         code=code.replace(' ','').replace('\n','')
         product_obj = self.env['product.product']

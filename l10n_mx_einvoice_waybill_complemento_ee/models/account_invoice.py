@@ -72,6 +72,7 @@ class AccountInvoice(models.Model):
                     weight_charge_total += weight_line
                     # weight_charge_total += merchandise.weight_charge
             rec.weight_charge_total = weight_charge_total
+            rec.weight_charge_gross_total = weight_charge_total
 
     def _get_default_clave_transporte(self):
         clave_transporte_obj = self.env['waybill.clave.transporte']
@@ -134,8 +135,6 @@ class AccountInvoice(models.Model):
                                                   'Tipo Distancia Recorrida (Total)',
                                                   default="KM")
     
-    weight_charge_total = fields.Float('Peso Bruto Total', digits=(14,3), compute="_get_weight_total")
-
     ### Ubicaciones ###
 
     # CP 2.0 #
@@ -227,6 +226,11 @@ class AccountInvoice(models.Model):
         if self.waybill_num_guia_aereo and (len(self.waybill_num_guia_aereo) < 12 or len(self.waybill_num_guia_aereo) > 15):
             raise ValidationError(_('Aviso!\n\nLa longitud para el Número de Guía debe ser entre 12 y 15 caracteres'))
 
+    
+    @api.onchange('weight_charge_total')
+    def onchange_weight_charge_total(self):
+        if self.weight_charge_total:
+            self.weight_charge_gross_total = self.weight_charge_total
 
     @api.onchange('tipo_transporte_id')
     def _onchange_tipo_transporte_id(self):
@@ -433,10 +437,11 @@ class InvoiceComplementLocationCP(models.Model):
 
     @api.constrains('id_location')
     def _constraint_location(self):
-        if self.id_location:
-            _estructura_ubicacion = re.compile('(OR|DE)[0-9]{6}')
-            if not _estructura_ubicacion.match(self.id_location):
-                raise UserError("La estructura de Origen/Destino %s.\n No cumple con la estructura del SAT (OR|DE)[0-9]" % self.id_location)
+        for rec in self:
+            if rec.id_location:
+                _estructura_ubicacion = re.compile('(OR|DE)[0-9]{6}')
+                if not _estructura_ubicacion.match(rec.id_location):
+                    raise UserError("La estructura de Origen/Destino %s.\n No cumple con la estructura del SAT (OR|DE)[0-9]" % rec.id_location)
 
         return True
         
@@ -485,7 +490,7 @@ class InvoiceLineComplementCP(models.Model):
 
     clave_stcc_id = fields.Many2one('waybill.producto.stcc', 'Clave STCC')
 
-    hazardous_material = fields.Selection([('Si','Si'),('No','No')], string="Material Peligroso", default="No" )
+    hazardous_material = fields.Selection([('Sí','Sí'),('No','No')], string="Material Peligroso", default="No" )
     
     hazardous_key_product_id = fields.Many2one('waybill.materiales.peligrosos', 'Clave Material Peligroso')
 

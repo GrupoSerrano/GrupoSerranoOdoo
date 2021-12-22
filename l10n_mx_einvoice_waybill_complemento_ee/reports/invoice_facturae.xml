@@ -95,7 +95,7 @@
                       <tr>
                         <td class="tg-v0pw">Destino</td>
                         <td class="tg-v0pw">Distancia Recorrida (KM)</td>
-                        <td class="tg-v0pw">Fecha/Hora Salida</td>
+                        <td class="tg-v0pw">Fecha/Hora Llegada</td>
                       </tr>
                       <tr>
                         <td class="tg-w9vdleft"><span t-esc="'['+destino.id_location+'] -'" t-if="destino.id_location"/><span t-field="destino.location_partner_id.name" /></td>
