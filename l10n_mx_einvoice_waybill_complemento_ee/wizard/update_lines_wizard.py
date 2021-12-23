@@ -172,7 +172,7 @@ class ImportLinesDetailWaybill(models.TransientModel):
                             pedimentos_list.append(pedimento.waybill_pedimento)
 
                     cantidades_transportadas_list = []
-                    if line.pedimentos_ids:
+                    if line.cantidades_ids:
                         for cant_tr in line.cantidades_ids:
                             cantidad = cant_tr.cantidad if cant_tr.cantidad else 0.0
                             idorigen = cant_tr.idorigen if cant_tr.idorigen else ""
@@ -181,7 +181,6 @@ class ImportLinesDetailWaybill(models.TransientModel):
                                                   idorigen,
                                                   iddestino]
                             cantidades_transportadas_list.append(list_cantidad_info)
-
                     extra_lines_final_list = []
                     if pedimentos_list or cantidades_transportadas_list:
                         for  x,y in zip_longest(pedimentos_list, cantidades_transportadas_list):
@@ -195,7 +194,6 @@ class ImportLinesDetailWaybill(models.TransientModel):
                             else:
                                 extra_line_info.append(False)
                             extra_lines_final_list.append(extra_line_info)
-
                     if extra_lines_final_list:
                         i  = 0
                         for extra_line in extra_lines_final_list:
@@ -337,10 +335,10 @@ class ImportLinesDetailWaybill(models.TransientModel):
                         continue
                     # transport_dangerous
                     # clave_dangerous_product_id
-                    pedimento = field[15]
-                    cantidad_transportada = field[16]
-                    id_origen = field[17]
-                    id_destino = field[18]
+                    pedimento = field[16]
+                    cantidad_transportada = field[17]
+                    id_origen = field[18]
+                    id_destino = field[19]
                     if not field[2] and not field[3] and not field[4]:
                         _logger.info("\n#### Es una Linea de Detalle (Pedimentos o Cantidad Transportada ) >>>>>>>> ")
 
