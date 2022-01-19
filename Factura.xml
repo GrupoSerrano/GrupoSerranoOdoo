@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<data inherit_id="account.report_invoice_document">
+  
+        <xpath expr="//h2[1]" position="replace">
+          <table width="100%" style="font-size:11px;padding-left: 25px;" id="company_address_data">
+              <tr>
+                  <td width="30%" style="vertical-align: middle;text-align: left;">
+                      <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.logo)" 
+                           style="max-height: 100px;height: auto;"/>
+                  </td>
+              </tr>
+            </table>
+          <table class="table table-condensed" style="font-size:14px;" t-if="o.cfdi_complemento == 'carta_porte'">
+                    <tr style="background-color: #527eb3; color: #FFFFFF; padding: 3px;">
+                        <td style="padding: 3px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;border-top-left-radius: 15px; border-top-right-radius: 15px;text-align:center">
+                            <span>
+                                <strong>CARTA PORTE</strong>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+              
+            <h2>
+                  <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'" style="color: #527eb3;">Factura</span>
+                  <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'" style="color: #527eb3;">Factura Borrador</span>
+                  <span t-if="o.move_type == 'out_invoice' and o.state == 'cancel'" style="color: red;">Factura Cancelada</span>
+                  <span t-if="o.move_type == 'out_refund'" style="color: #527eb3;">Nota Credito</span>
+                  <span t-if="o.move_type == 'in_refund'" style="color: #527eb3;">Nota Credito Proveedor</span>
+                  <span t-if="o.move_type == 'in_invoice'" style="color: #527eb3;">Factura Proveedor</span>
+                  <span t-if="o.name != '/'" t-field="o.name" style="color: #527eb3;"/>
+                  <span style="float: right;color: #527eb3;" t-if="o.move_type == 'out_invoice' and o.transport_document_cfdi == False">
+                    Ingreso
+                  </span>
+                  <span style="float: right;color: #527eb3;" t-if="o.move_type == 'out_invoice' and o.transport_document_cfdi == True">
+                    Traslado
+                  </span>
+              </h2>
+                    
+            <table width="100%" style="font-size: 14px;" id="customer_address_data" t-if="o.move_type in ('out_invoice','out_refund')">
+                    <tr>
+                        <td width="34%" style="border: 1px solid #ddd;">
+                          <BR/>
+                           <p style="margin-left: 10px;"><strong>EMPRESA: </strong></p>
+                           <p style="margin-left: 20px;">
+                                <span t-field="o.company_id.partner_id.name"/>
+                                <BR/>
+                                <span t-field="o.company_id.partner_id.street_name"/>
+                                <span t-if="o.company_id.partner_id.street_number"> No. <span t-field="o.company_id.partner_id.street_number"/></span>
+                                <span t-if="o.company_id.partner_id.street_number2"> Int. <span t-field="o.company_id.partner_id.street_number2"/></span>
+                                <BR t-if="o.company_id.partner_id.street2 or o.company_id.partner_id.colonia_sat_id.name"/>
+                                <span t-raw="o.company_id.partner_id.street2 or o.company_id.partner_id.colonia_sat_id.name"/>
+                                <span t-if="o.company_id.partner_id.locality_sat_id.name">, <span t-field="o.company_id.partner_id.locality_sat_id.name"/></span>
+                                <BR />
+                                <span t-if="o.company_id.partner_id.country_id.code != 'MX'">
+                                    <span t-field="o.company_id.partner_id.state_id.name"/>, <span t-field="o.company_id.partner_id.country_id.name"/><BR />
+                                    CP: <span t-field="o.company_id.partner_id.zip"/>
+                                </span>
+                                <span t-if="o.company_id.partner_id.country_id.code == 'MX'">
+                                    <span t-if="o.company_id.partner_id.zip_sat_id.township_sat_code"><span t-field="o.company_id.partner_id.zip_sat_id.township_sat_code.code"/>, </span>
+                                    <span t-field="o.company_id.partner_id.state_id.name"/>, 
+                                    <span t-field="o.company_id.partner_id.country_id.name"/><BR />
+                                    CP: <span t-field="o.company_id.partner_id.zip_sat_id.code"/>
+                                </span>
+                                <BR/>RFC: <span t-field="o.company_id.partner_id.vat"/>
+                                <BR/>Regimen Fiscal: <span t-field="o.company_id.l10n_mx_edi_fiscal_regime"/>
+                                <BR/>Expedido en: <span t-field="o.company_id.partner_id.city_id.name"/> C.P.<span t-field="o.company_id.partner_id.zip_sat_id.code"/>
+                            </p>
+                           <!-- <p style="margin-left: 20px;">
+                                <span t-field="o.company_id.name"/>
+                                <BR/>RFC: <span t-field="o.company_id.vat"/>
+                                
+                           </p> -->
+                        </td>
+                        <td width="33%" style="border: 1px solid #ddd;">
+                            <BR/>
+                            <p style="margin-left: 10px;"><strong>CLIENTE: </strong></p>
+                            <p style="margin-left: 20px;">
+                                <span t-field="o.partner_id.name"/>
+                                <BR/>
+                                <span t-field="o.partner_id.street_name"/>
+                                <span t-if="o.partner_id.street_number"> No. <span t-field="o.partner_id.street_number"/></span>
+                                <span t-if="o.partner_id.street_number2"> Int. <span t-field="o.partner_id.street_number2"/></span>
+                                <BR/>
+                                <span t-raw="o.partner_id.street2 or o.partner_id.colonia_sat_id.name"/>
+                                <span t-if="o.partner_id.locality_sat_id.name">, <span t-field="o.partner_id.locality_sat_id.name"/></span>
+                                <BR />
+                                <span t-if="o.partner_id.country_id.code != 'MX'">
+                                    <span t-field="o.partner_id.state_id.name"/>, <span t-field="o.partner_id.country_id.name"/><BR />
+                                    CP: <span t-field="o.partner_id.zip"/>
+                                </span>
+                                <span t-if="o.partner_id.country_id.code == 'MX'">
+                                    <span t-if="o.partner_id.zip_sat_id.township_sat_code"><span t-field="o.partner_id.zip_sat_id.township_sat_code.code"/>, </span>
+                                    <span t-field="o.partner_id.state_id.name"/>, 
+                                    <span t-field="o.partner_id.country_id.name"/><BR />
+                                    CP: <span t-field="o.partner_id.zip_sat_id.code"/>
+                                </span>
+                                <BR/>RFC: <span t-field="o.partner_id.vat"/>
+                                <span t-if="o.partner_id.country_id.code != 'MX' and o.partner_id.num_reg_trib">
+                                    <BR/>Registro Tributario: <span t-field="o.partner_id.num_reg_trib"/>
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+        </xpath>
+  
+        <xpath expr="//div[@name='customer_code']" position="after">
+            <t  t-if="o.move_type in ('out_invoice','out_refund')">
+                <div t-if="o.currency_id" t-att-class="o_grid_layout">
+                    <strong>Moneda:</strong><br/>
+                    <span t-field="o.currency_id.name"/>
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[@class='page']" position="after">
+          <div class="footer">
+                <table style="width: 100%">
+                    <tr >
+                        <td style="font-size:11px;width: 15%;text-align: center;border: 1px solid #07190B;border-collapse: collapse;padding: 1px;border-bottom: 1px;border-left: 1px;border-right: 1px;">
+                            <span t-esc="user.company_id.name"></span>
+                        </td>
+                        <td style="width: 20%;text-align: left;border: 1px solid #07190B;border-collapse: collapse;padding: 1px;border-bottom: 1px;border-left: 1px;border-right: 1px;">
+                        </td>
+                        <td style="width: 50%;text-align: center;border: 1px solid #07190B;border-collapse: collapse;padding: 1px;border-bottom: 1px;border-left: 1px;border-right: 1px;">
+                        </td>
+                        <td style="width: 15%;text-align: right;border: 1px solid #07190B;border-collapse: collapse;padding: 1px;border-bottom: 1px;border-left: 1px;border-right: 1px;">
+
+                             <strong  style="font-size:11px;text-align: center;" ><span>   Pagina </span><span class="page" /> de <span class="topage" /></strong>                       
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+
+    </data>
+
