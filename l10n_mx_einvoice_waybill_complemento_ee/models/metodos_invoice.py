@@ -1396,7 +1396,7 @@ class AccountInvoice(models.Model):
             if partner_location_parent.state_id and partner_location_parent.state_id:
                 origin_partner_state = partner_location_parent.state_id.name
         if origin_partner_state:
-            domicilio = domicilio+' Estado: '+ str(origin_partner_township)
+            domicilio = domicilio+' Estado: '+ str(origin_partner_state)
 
         origin_partner_country = ""
         if partner_location.country_id:
