@@ -1367,15 +1367,15 @@ class AccountInvoice(models.Model):
         if origin_partner_int_number:
             domicilio = domicilio+' No. Interior: '+ str(origin_partner_int_number)
 
-        origin_partner_colony = partner_location.colonia_sat_id.code if partner_location.colonia_sat_id else ""
+        origin_partner_colony = partner_location.colonia_sat_id.name if partner_location.colonia_sat_id else ""
         if not origin_partner_colony and partner_location_parent:
             origin_partner_colony = partner_location_parent.colonia_sat_id.name if partner_location_parent.colonia_sat_id else ""
         if origin_partner_colony:
             domicilio = domicilio+' Colonia: '+ str(origin_partner_colony)
 
-        origin_partner_locality = partner_location.zip_sat_id.locality_sat_code.code if partner_location.zip_sat_id.locality_sat_code else ""
+        origin_partner_locality = partner_location.zip_sat_id.locality_sat_code.name if partner_location.zip_sat_id.locality_sat_code else ""
         if not origin_partner_locality and partner_location_parent:
-            origin_partner_locality = partner_location_parent.zip_sat_id.locality_sat_code.code if partner_location_parent.zip_sat_id.locality_sat_code else ""
+            origin_partner_locality = partner_location_parent.zip_sat_id.locality_sat_code.name if partner_location_parent.zip_sat_id.locality_sat_code else ""
         if origin_partner_locality:
             domicilio = domicilio+' Localidad: '+ str(origin_partner_locality)
 
@@ -1383,7 +1383,7 @@ class AccountInvoice(models.Model):
         if origin_partner_references:
             domicilio = domicilio+' Referencia: '+ str(origin_partner_references)
 
-        origin_partner_township = partner_location.city_id.l10n_mx_edi_code if partner_location.city_id else ""
+        origin_partner_township = partner_location.city_id.name if partner_location.city_id else ""
         if not origin_partner_township and partner_location_parent:
             origin_partner_township = partner_location_parent.city_id.name if partner_location_parent.city_id else ""
         if origin_partner_township:
